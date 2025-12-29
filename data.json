@@ -1,0 +1,29 @@
+{
+    "profile": {
+        "name": "Marian Bodnar",
+        "role": "Platform Engineer | DevOps Engineer",
+        "email": "bodnarmarian14@gmail.com",
+        "linkedin": "linkedin.com/in/alexdev",
+        "phone": "+40741128478",
+        "location": "Breaza, Suceava, Romania"
+    },
+    "about": "I am a passionate professional dedicated to building digital experiences. With a background in Computer Science, I bridge the gap between complex requirements and user-friendly solutions.",
+    "skills": {
+        "frontend": ["HTML5", "CSS3", "JavaScript", "React", "Tailwind"],
+        "backend": ["Node.js", "Python", "SQL", "AWS", "MongoDB"]
+    },
+    "experience": [
+        {
+            "role": "Senior Web Developer",
+            "company": "Tech Company Inc.",
+            "date": "2022 - Present",
+            "desc": "Leading the frontend team and rebuilding the legacy architecture using React."
+        },
+        {
+            "role": "BS in Computer Science",
+            "company": "University of Technology",
+            "date": "2016 - 2020",
+            "desc": "Graduated with honors. Specialized in AI and Data structures."
+        }
+    ]
+}

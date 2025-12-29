@@ -1,1 +1,109 @@
-<h1>Hellow!!!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marian Bodnar | Platform Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Generating PDF...</p>
+    </div>
+
+    <nav class="navbar" data-html2canvas-ignore="true">
+        <a href="#home" class="logo">MyPortfolio</a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#timeline">Experience</a></li>
+            <li><a href="#videos">Videos</a></li>
+        </ul>
+        <button id="downloadBtn" class="btn-primary">
+            <i class="fas fa-file-download"></i> Download PDF
+        </button>
+    </nav>
+
+    <main id="content-to-print">
+        
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <img src="images/profile/profile.png" alt="Profile" class="profile-img">
+                
+                <h1 id="profile-name">Loading name...</h1>
+                <p id="profile-role">Loading role...</p>
+                
+                <div class="pdf-contact-info">
+                    <p id="pdf-contact-text">Loading contact info...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p id="about-text">Loading...</p>
+        </section>
+
+        <section id="skills" class="section">
+            <h2>Technical Skills</h2>
+            <div class="skills-wrapper">
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <div class="skill-tags" id="skills-frontend"></div>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend & Data</h3>
+                    <div class="skill-tags" id="skills-backend"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="section">
+            <h2>Experience & Education</h2>
+            <div class="timeline-container" id="timeline-list"></div>
+        </section>
+
+        <section id="videos" class="section">
+            <h2>Video Demos</h2>
+            <div class="video-wrapper">
+                <div class="video-container web-video">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video" allowfullscreen></iframe>
+                </div>
+                <div class="pdf-video-link" style="display: none;">
+                    <p><strong>Watch Demo:</strong> <a href="https://youtu.be/dQw4w9WgXcQ">https://youtu.be/dQw4w9WgXcQ</a></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer data-html2canvas-ignore="true">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <p><i class="fas fa-envelope"></i> <span id="footer-email">...</span></p>
+                <p><i class="fas fa-phone"></i> <span id="footer-phone">...</span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="footer-location">...</span></p>
+            </div>
+            <div class="footer-col">
+                <h3>Socials</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
