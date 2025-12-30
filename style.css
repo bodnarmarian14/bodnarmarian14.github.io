@@ -10,6 +10,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+    scroll-behavior: smooth;
+    /* This ensures standard HTML links respect the sticky header height */
+    scroll-padding-top: 30px; 
+}
+
+/* Specific fix for the sections to ensure they snap correctly */
+section, #home {
+    margin-top: 0;
+    margin-bottom: 0;
+    scroll-margin-top: 30px;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--text-main);
@@ -144,3 +157,88 @@ footer { background: var(--secondary); color: white; padding: 40px 20px 20px; ma
 .generating-pdf .pdf-video-link { display: block !important; }
 .generating-pdf .pdf-contact-info { display: block !important; }
 .generating-pdf .section { box-shadow: none; border: 1px solid #eee; margin-bottom: 10px; }
+
+/* Add/Update these specific classes in your style.css */
+
+/* PRESERVE NEWLINES FROM YAML */
+.multi-line-text {
+    white-space: pre-wrap; /* Crucial for multi-line YAML strings */
+}
+
+/* ADD THESE NEW RULES: */
+.markdown-content {
+    line-height: 1.8;
+    color: var(--text-main);
+}
+
+.markdown-content p {
+    margin-bottom: 15px; /* Nice spacing between paragraphs */
+}
+
+.markdown-content ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.markdown-content li {
+    margin-bottom: 5px;
+}
+
+/* --- LINE CLAMP LOGIC --- */
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Show exactly 5 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* transition: max-height 0.5s ease; Optional: for smooth animations requires max-height tricks */
+}
+
+/* Button Styling */
+.read-more-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 0;
+    font-size: 0.9rem;
+    display: none; /* Hidden initially, JS will show it if text is long */
+}
+
+.read-more-btn:hover {
+    text-decoration: underline;
+}
+
+/* Make bold text stand out */
+.markdown-content strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* SKILL ICONS */
+.skill-tags span i {
+    margin-right: 8px;
+    color: var(--primary);
+}
+
+/* JOB HEADER (Logo + Title) */
+.job-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.company-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-right: 15px;
+    background: #fff; /* Ensure transparent logos look okay */
+    border: 1px solid #eee;
+}
+
+/* Adjust timeline content to accommodate logo */
+.timeline-content h3 { margin-bottom: 2px; }
+.timeline-content h4 { margin-bottom: 0; }

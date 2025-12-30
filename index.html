@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marian Bodnar | Platform Engineer</title>
+    <title>My Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -22,7 +25,8 @@
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
-            <li><a href="#timeline">Experience</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#education">Education</a></li>
             <li><a href="#videos">Videos</a></li>
         </ul>
         <button id="downloadBtn" class="btn-primary">
@@ -34,39 +38,42 @@
         
         <section id="home" class="hero">
             <div class="hero-content">
-                <img src="images/profile/profile.png" alt="Profile" class="profile-img">
+                <img src="" alt="Profile" class="profile-img" id="profile-img">
                 
-                <h1 id="profile-name">Loading name...</h1>
-                <p id="profile-role">Loading role...</p>
+                <h1 id="profile-name">Loading...</h1>
+                <p id="profile-role">Loading...</p>
                 
                 <div class="pdf-contact-info">
-                    <p id="pdf-contact-text">Loading contact info...</p>
+                    <p id="pdf-contact-text"></p>
                 </div>
             </div>
         </section>
 
         <section id="about" class="section">
             <h2>About Me</h2>
-            <p id="about-text">Loading...</p>
+    
+            <div id="about-content" class="markdown-content line-clamp">
+                Loading...
+            </div>
+            
+            <button id="read-more-btn" class="read-more-btn">Read More</button>
         </section>
 
         <section id="skills" class="section">
             <h2>Technical Skills</h2>
-            <div class="skills-wrapper">
-                <div class="skill-category">
-                    <h3>Frontend</h3>
-                    <div class="skill-tags" id="skills-frontend"></div>
-                </div>
-                <div class="skill-category">
-                    <h3>Backend & Data</h3>
-                    <div class="skill-tags" id="skills-backend"></div>
-                </div>
+            <div class="skills-container-single">
+                <div class="skill-tags centered-tags" id="skills-list"></div>
             </div>
         </section>
 
-        <section id="timeline" class="section">
-            <h2>Experience & Education</h2>
-            <div class="timeline-container" id="timeline-list"></div>
+        <section id="experience" class="section">
+            <h2>Experience</h2>
+            <div class="timeline-container" id="experience-list"></div>
+        </section>
+
+        <section id="education" class="section">
+            <h2>Education</h2>
+            <div class="timeline-container" id="education-list"></div>
         </section>
 
         <section id="videos" class="section">
@@ -87,9 +94,9 @@
         <div class="footer-container">
             <div class="footer-col">
                 <h3>Contact</h3>
-                <p><i class="fas fa-envelope"></i> <span id="footer-email">...</span></p>
-                <p><i class="fas fa-phone"></i> <span id="footer-phone">...</span></p>
-                <p><i class="fas fa-map-marker-alt"></i> <span id="footer-location">...</span></p>
+                <p><i class="fas fa-envelope"></i> <span id="footer-email"></span></p>
+                <p><i class="fas fa-phone"></i> <span id="footer-phone"></span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="footer-location"></span></p>
             </div>
             <div class="footer-col">
                 <h3>Socials</h3>
@@ -99,8 +106,11 @@
                 </div>
             </div>
         </div>
+        
         <div class="footer-bottom">
-            <p>&copy; 2024. All Rights Reserved.</p>
+            <p>
+                &copy; <span id="year"></span> <span id="footer-name"></span>. All Rights Reserved.
+            </p>
         </div>
     </footer>
 

@@ -1,0 +1,77 @@
+profile:
+  name: "Marian Bodnar"
+  role: "Platform Engineer | DevOps Engineer"
+  image: "images/profile/profile.png"  # Path to your profile photo
+  email: "bodnarmarian14@gmail.com"
+  linkedin: "linkedin.com/in/marian-bodnar-411948261"
+  phone: "+40741128478"
+  location: "Breaza, Suceava, Romania"
+
+about: |
+  My journey in the IT field started in my second year of university. As part of the curriculum, all students are required to 
+  participate in an internship. Since I didn't want to do the internship through the university, I decided to take part in a 
+  selection test held by a local company. After the test, I was disappointed because I thought I hadn't performed well. 
+  However, two or three hours later, I received a call saying, "Congratulations, you passed the test, and if you'd like, 
+  we can schedule an interview." Everything went well, and I got the job. After three years, I decided to explore a new 
+  path in my career and applied for a DevOps internship at a larger company. The interview process was very interesting. 
+  Although I couldn't answer every question, one topic I struggled with was cloud technologies. However, most of the questions 
+  were related to programming and my performance on the test. I did well during the internship, but unfortunately, I wasn't 
+  able to secure a job offer. The following year, I secured another internship, this time with a bit more experience under 
+  my belt, and I eventually landed my first full-time DevOps role. Now, given the changing job market, I've also subscribed 
+  to DataCamp to learn more about data science and possibly AI.
+
+# NEW: Education Section
+education:
+  - degree: "Master of Science in Computer Science"
+    school: "Tech University"
+    date: "2020 - 2022"
+    desc: "Specialized in Artificial Intelligence and Cloud Computing."
+  - degree: "Bachelor of Science in Information Systems"
+    school: "State College"
+    date: "2016 - 2020"
+    desc: "Graduated with Honors. President of the Coding Club."
+
+skills:
+    - name: "GCP"
+      icon: "fab fa-gcloud"
+    - name: "AWS"
+      icon: "fab fa-aws"
+    - name: "Azure"
+      icon: "fab fa-azure"
+    - name: "Docker"
+      icon: "fab fa-docker"
+    - name: "Python"
+      icon: "fab fa-python"
+    
+    - name: "Terraform"
+      icon: "fab fa-terraform"
+    - name: "Ansible"
+      icon: "fab fa-ansible"
+    - name: "GitLab CI/CD"
+      icon: "fab fa-gitlab"
+      
+    - name: "Git"
+      icon: "fab fa-git"
+    - name: "Bash"
+      icon: "fab fa-bash"
+    - name: "YAML"
+      icon: "fab fa-yaml"
+    - name: "Kustomize"
+      icon: "fab fa-kustomize"
+    - name: "JSON"
+      icon: "fab fa-json"
+
+experience:
+  - role: "Platform Engineer"
+    company: "Qodea"
+    logo: "images/companies/qodea.jpeg" # Replace with path to company logo
+    date: "Jul 2025 - Present"
+    desc: |
+      Leading the frontend team and rebuilding the legacy architecture using React.
+      - Improved site speed by 40%.
+      - Mentored junior developers.
+  - role: "Junior DevOps Engineer"
+    company: "Nagarro"
+    logo: "images/companies/nagarro.png" # Replace with path to company logo
+    date: "Nov 2023 - Jul 2025"
+    desc: "Developed API integrations and maintained the company dashboard."
