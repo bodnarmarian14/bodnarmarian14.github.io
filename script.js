@@ -76,26 +76,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // -- EXPERIENCE (With Company Logos) --
             const expContainer = document.getElementById('experience-list');
+            
             data.experience.forEach(item => {
+                const description = marked.parse(item.desc)
                 const html = `
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date">${item.date}</div>
                         <div class="timeline-content">
-                            <div class="job-header">
+                            <div class="timeline-header">
                                 <img src="${item.logo}" alt="Logo" class="company-logo" onerror="this.style.display='none'">
                                 <div>
                                     <h3>${item.role}</h3>
                                     <h4>${item.company}</h4>
                                 </div>
                             </div>
-                            <p class="multi-line-text">${item.desc}</p>
+                            <p class="markdown-content">${description}</p>
                         </div>
                     </div>
                 `;
                 expContainer.innerHTML += html;
             });
 
+            // -- CERTIFICATIONS --
+            const certContainer = document.getElementById('cert-list');
+            
+            if (certContainer && data.certifications) {
+                data.certifications.forEach(cert => {
+                    const html = `
+                        <a href="${cert.link}" target="_blank" class="cert-card">
+                            <h3>${cert.title}</h3>
+
+                            <div class="cert-img-wrapper">
+                                <img src="${cert.image}" alt="${cert.title}" onerror="this.src='https://via.placeholder.com/100?text=Badge'">
+                            </div>
+
+                            <div class="cert-info">
+                                <p>${cert.issuer}</p>
+                                <span class="verify-btn">Verify <i class="fas fa-external-link-alt"></i></span>
+                            </div>
+                        </a>
+                    `;
+                    certContainer.innerHTML += html;
+                });
+            }
             // -- EDUCATION (New Section) --
             const eduContainer = document.getElementById('education-list');
             if (data.education) {
@@ -105,13 +129,68 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="timeline-dot"></div>
                             <div class="timeline-date">${item.date}</div>
                             <div class="timeline-content">
-                                <h3>${item.degree}</h3>
-                                <h4>${item.school}</h4>
-                                <p>${item.desc}</p>
+                                <div class="timeline-header">
+                                  <img src="${item.logo}" alt="Logo" class="company-logo" onerror="this.style.display='none'">
+                                  <div>
+                                    <h3>${item.degree}</h3>
+                                    <h4>${item.school}</h4>
+                                  </div>
+                                </div>
+                                <p class="markdown-content">${item.desc}</p>
                             </div>
                         </div>
                     `;
                     eduContainer.innerHTML += html;
+                });
+            }
+
+
+            // -- VIDEOS --
+            const videoContainer = document.getElementById('video-list');
+            
+            if (data.videos) {
+                data.videos.forEach((video, index) => {
+                    // Create unique IDs for this video's elements
+                    const descId = `video-desc-${index}`;
+                    const btnId = `video-btn-${index}`;
+
+                    const html = `
+                        <div class="video-wrapper">
+                            <h3>${video.title}</h3>
+                            
+                            <div class="video-container web-video">
+                                <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+
+                            <div id="${descId}" class="markdown-content line-clamp video-desc">
+                                ${marked.parse(video.desc)}
+                            </div>
+                            <button id="${btnId}" class="read-more-btn">Read More</button>
+
+                            <div class="pdf-video-link" style="display: none;">
+                                <p><strong>Watch Video:</strong> <a href="https://youtu.be/${video.id}">https://youtu.be/${video.id}</a></p>
+                            </div>
+                        </div>
+                    `;
+                    videoContainer.innerHTML += html;
+
+                    // --- READ MORE LOGIC FOR THIS SPECIFIC VIDEO ---
+                    // We need to wait for the DOM to update
+                    setTimeout(() => {
+                        const descEl = document.getElementById(descId);
+                        const btnEl = document.getElementById(btnId);
+
+                        // Check if text is long enough to need a button
+                        if (descEl.scrollHeight > descEl.clientHeight) {
+                            btnEl.style.display = 'inline-block';
+                        }
+
+                        // Add Click Event
+                        btnEl.addEventListener('click', () => {
+                            descEl.classList.toggle('line-clamp');
+                            btnEl.textContent = descEl.classList.contains('line-clamp') ? 'Read More' : 'Read Less';
+                        });
+                    }, 0);
                 });
             }
         })
@@ -158,3 +237,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+

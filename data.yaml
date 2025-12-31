@@ -20,16 +20,58 @@ about: |
   my belt, and I eventually landed my first full-time DevOps role. Now, given the changing job market, I've also subscribed 
   to DataCamp to learn more about data science and possibly AI.
 
-# NEW: Education Section
-education:
-  - degree: "Master of Science in Computer Science"
-    school: "Tech University"
-    date: "2020 - 2022"
-    desc: "Specialized in Artificial Intelligence and Cloud Computing."
-  - degree: "Bachelor of Science in Information Systems"
-    school: "State College"
-    date: "2016 - 2020"
-    desc: "Graduated with Honors. President of the Coding Club."
+experience:
+  - role: "Platform Engineer"
+    company: "Qodea"
+    logo: "images/companies/qodea.jpeg"
+    date: "Jul 2025 - Present"
+    desc: |
+      Using Google Cloud, Terraform, Terragrunt
+  - role: "Junior DevOps Engineer"
+    company: "Nagarro"
+    logo: "images/companies/nagarro.png"
+    date: "Nov 2023 - Jul 2025"
+    desc: |
+      Developing and maintaining CI pipeline using GitLabCI. Deploying and managing applications on Kubernetes using various manifests
+      (Deployments, Services, Ingress, ConfigMaps). Creating and publishing Dockerfiles and Helm charts to Harbor/JFrog or creating 
+      small Python projects to use Harbor API. Automating the creation of a POC K8s cluster on 3 VMs using Ansible.
+  - role: "Intern DevOps Engineer"
+    company: "Nagarro"
+    logo: "images/companies/nagarro.png"
+    date: "Jul 2023 - Aug 2023"
+    desc: |
+      Before the internship, I participated in a remote learning program with weekly meetings focusing on the basics of Linux, Docker, 
+      and Jenkins. During the internship, I applied and enhanced that knowledge through practice. I was working for Dockerfile, 
+      Jenkins pipeline that built and pushed the image in ECS and after deploying the on ECS or EKS. Also, I developed a cron pipeline 
+      that creates/destroys the infrastructure written using Terraform IaC.
+  - role: "Intern DevOps Engineer"
+    company: "Endava"
+    logo: "images/companies/endava.png"
+    date: "Jul 2022 - Sep 2022"
+    desc: |
+      As part of an eight-person team, contributed to the development of infrastructure using Terraform. After we had the infrastructure 
+      set up each one had different tasks. My responsibilities included designing and implementing Dockerfile. for backend applications 
+      and creating Kubernetes manifests for resources such as Deployments, Services, and Ingress. Another task was to create a backup 
+      for database every day and I used the K8s CronJob for this.
+  - role: "C/C++ Developer"
+    company: "Antaco Romania S.R.L / QST"
+    logo: "images/companies/qst.jpeg"
+    date: "Oct 2019 - Jul 2022"
+    desc: |
+      Developed and maintained C/C++ code, including refactoring legacy C code into modern C++. Implemented comprehensive unit tests using 
+      the Google Test framework. Contributing to front-end web development using HTML, CSS, and JavaScript/jQuerry. Besides, I 
+      changed/adapted the CI pipeline for the newly developed code.
+  - role: "Intern C/C++ Developer"
+    company: "Antaco Romania S.R.L / QST"
+    logo: "images/companies/qst.jpeg"
+    date: "Jul 2019 - Oct 2019"
+    desc: |
+      Gained practical experience in software development using C/C++ (mostly based on standard 11). I was using external libraries such 
+      as Boost. Also, I learned how to structure and use package managers such as CMake or Conan for building and managing dependencies. 
+      Besides those, I was learning the basics of Linux and how to connect to MariaDB using C++ connectors. At the end of the practice, 
+      I developed a project that used all the learned technologies.
+
+
 
 skills:
     - name: "GCP"
@@ -61,17 +103,76 @@ skills:
     - name: "JSON"
       icon: "fab fa-json"
 
-experience:
-  - role: "Platform Engineer"
-    company: "Qodea"
-    logo: "images/companies/qodea.jpeg" # Replace with path to company logo
-    date: "Jul 2025 - Present"
+certifications:
+  - title: "Professional Cloud DevOps Enineer"
+    issuer: "Google Cloud"
+    image: "https://images.credly.com/size/110x110/images/33f08b7e-fa6a-41cd-810a-21cc1c336f6d/image.png"
+    link: "https://www.credly.com/badges/4cdf8cc6-bf87-4f1f-ba14-e83094d5ab7b/public_url"
+
+  - title: "CKA: Certified Kubernetes Administrator"
+    issuer: "The Linux Foundation"
+    image: "https://images.credly.com/size/110x110/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png"
+    link: "https://www.credly.com/badges/e3536e2b-a534-427c-b7b7-38ee1078c832/public_url"
+
+  - title: "Associate Cloud Engineer Certification"
+    issuer: "Google Cloud"
+    image: "https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png"
+    link: "https://www.credly.com/badges/1fe8d4c9-4b6e-42b9-8f83-03efdcad754f/public_url"
+
+  - title: "AWS Certified Cloud Practitioner"
+    issuer: "Amazon Web Services"
+    image: "https://images.credly.com/size/110x110/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png" 
+    link: "https://www.credly.com/badges/88be74a4-3418-4577-b53f-8f978423208c/public_url"
+    
+  - title: "Azure Fundamentals"
+    issuer: "Microsoft"
+    image: "https://images.credly.com/size/110x110/images/be8fcaeb-c769-4858-b567-ffaaa73ce8cf/image.png"
+    link: "https://www.credly.com/badges/3cbbbda5-ba6c-4635-a861-3bb6b13b332f/public_url"
+    
+  - title: "Cloud Digital Leader Certification"
+    issuer: "Google Cloud"
+    image: "https://images.credly.com/size/110x110/images/44994cda-b5b0-44cb-9a6d-d29b57163073/image.png"
+    link: "https://www.credly.com/badges/e392c409-58cd-4a11-b7f3-c8a93e175a01/public_url"
+  
+  - title: "GitOps Fundamentals"
+    issuer: "Codefresh"
+    image: "https://images.credly.com/size/110x110/images/fbd71e9c-07f7-4a8b-a874-2bf5001a6dbf/blob"
+    link: "https://www.credly.com/badges/9301eeea-c745-4c9b-8b06-015aeb609560/public_url"
+
+  - title: "HashiCorp Certified: Terraform Associate (002)"
+    issuer: "HashiCorp"
+    image: "https://images.credly.com/size/110x110/images/cd038261-9d1c-4792-bc62-3a3b5bda175c/blob" 
+    link: "https://www.credly.com/badges/1b6dd5fb-0cbe-4f08-8f75-da28b88d455e/public_url"
+    
+  - title: "Generative AI Leader Certification"
+    issuer: "GoogleCloud"
+    image: "https://images.credly.com/size/110x110/images/ec23e41a-0f32-4a98-9c00-28925621b281/blob"
+    link: "https://www.credly.com/badges/3ea45eaa-d3b3-4825-9a9e-5ecb1afc0d65/public_url"
+
+
+
+education:
+  - degree: "Master of Computer Science and Engineering"
+    school: "Stefan cel Mare University of Suceava"
+    date: "2021 - 2023"
+    logo: "images/companies/usv.jpeg"
+    desc: "Specialized in various aspects of compute science"
+  - degree: "Bachelor of Computer Science"
+    school: "Stefan cel Mare University of Suceava"
+    date: "2017 - 2021"
+    logo: "images/companies/usv.jpeg"
+    desc: "Specialized in compute science."
+
+videos:
+  - title: "DevOps project in GCP"
+    id: "cdDyN_a_TII"
     desc: |
-      Leading the frontend team and rebuilding the legacy architecture using React.
-      - Improved site speed by 40%.
-      - Mentored junior developers.
-  - role: "Junior DevOps Engineer"
-    company: "Nagarro"
-    logo: "images/companies/nagarro.png" # Replace with path to company logo
-    date: "Nov 2023 - Jul 2025"
-    desc: "Developed API integrations and maintained the company dashboard."
+      This is a simple flow of DevOps on GCP. In GCP is running a GKE cluster. For CI/CD is used Google Cloud build. 
+      Based on cloud build a docker image is created and uploaded on Artifactory Repository and the new images is used to create 
+      the deployment on each environment.
+  - title: "Ansible K8s cluster"
+    id: "2nzw8ehkXJE"
+    desc: |
+      Create a Kubernetes cluster on Digital Ocean using Terraform and Ansible. The Kubernetes cluster is formed by three droplets. 
+      One of the droplets is used as a control plane or master of the cluster and the others are used as worker nodes. At the end 
+      of the video, I display the cluster nodes and run a sample pod with the Nginx image.
