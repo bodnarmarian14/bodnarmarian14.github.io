@@ -96,12 +96,12 @@ skills:
     icon: "devicon-bash-plain"
   - name: "Git"
     icon: "devicon-git-plain colored"
-  - name: "Jenkins"
-    icon: "devicon-jenkins-plain colored"
   - name: "Prometheus"
     icon: "devicon-prometheus-original colored"
-  - name: "Grafana"
-    icon: "devicon-grafana-original colored"
+  - name: "Helm"
+    icon: "devicon-helm-original colored"
+  - name: "Kustomize"
+    icon: "devicon-yaml-plain colored"
 
 certifications:
   - title: "Professional Cloud DevOps Enineer"
