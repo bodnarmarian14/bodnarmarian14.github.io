@@ -370,3 +370,59 @@ footer { background: var(--secondary); color: white; padding: 40px 20px 20px; ma
   align-items: center;
   gap: 5px;
 }
+
+/* PROJECTS */
+.project-card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes button to bottom if desc is short */
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
+
+.project-card h3 {
+    color: var(--secondary);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.project-desc {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    flex-grow: 1; /* Allows this text to expand and align buttons */
+}
+
+/* Repository Button */
+.repo-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #f1f5f9;
+    color: var(--text-main);
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.2s, color 0.2s;
+    align-self: flex-start; /* Aligns button to left */
+}
+
+.repo-btn:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.repo-btn i {
+    margin-right: 5px;
+}

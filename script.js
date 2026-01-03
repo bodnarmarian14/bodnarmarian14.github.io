@@ -120,6 +120,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     certContainer.innerHTML += html;
                 });
             }
+
+            // -- PROJECTS --
+            const projectContainer = document.getElementById('project-list');
+            
+            if (projectContainer && data.projects) {
+                data.projects.forEach(project => {
+                    // Handle optional description
+                    // We parse markdown so you can use bolding in descriptions
+                    const descHTML = project.desc 
+                        ? `<div class="project-desc">${marked.parse(project.desc)}</div>` 
+                        : '';
+
+                    const html = `
+                        <div class="project-card">
+                            <h3>${project.title}</h3>
+                            ${descHTML}
+                            <a href="${project.repo}" target="_blank" class="repo-btn">
+                                <i class="fab fa-github"></i> View Repository
+                            </a>
+                        </div>
+                    `;
+                    projectContainer.innerHTML += html;
+                });
+            }
+
             // -- EDUCATION (New Section) --
             const eduContainer = document.getElementById('education-list');
             if (data.education) {

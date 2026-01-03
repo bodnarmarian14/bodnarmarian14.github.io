@@ -149,7 +149,22 @@ certifications:
     image: "https://images.credly.com/size/110x110/images/ec23e41a-0f32-4a98-9c00-28925621b281/blob"
     link: "https://www.credly.com/badges/3ea45eaa-d3b3-4825-9a9e-5ecb1afc0d65/public_url"
 
+projects:
+  - title: "AWS Terraform"
+    repo: "https://github.com/bmarian98/terraform_5"
+    desc: "Simple deployment of a project in AWS using terraform as IAC."
+  
+  - title: "Backend"
+    repo: "https://gitlab.com/devops-project23/frontend"
+    desc: "Backed in SpringBoot for Azure project."
 
+  - title: "Frontend"
+    repo: "https://gitlab.com/devops-project23/backend"
+    desc: "Frontend in Angular for Azure project."
+
+  - title: "Infrastructure"
+    repo: "https://gitlab.com/devops-project23/infrastructure"
+    desc: "Terraform infrastructure code for Azure project."
 
 education:
   - degree: "Master of Computer Science and Engineering"
