@@ -39,7 +39,8 @@ This step have to be done for both A and CNAME record.
 5. Wait. GH will run a DNS check. With the gray cloud active, this should pass quickly.
 
 6. Enalbe HTTPS: Check the box **_Enforce HTTPS_**.
-  - Note: If it says "Certificate not yet created", wait 10-15 minutes and refresh. Do not proceed to the next step until you can visit the site on HTTPS.
+  > [!NOTE]
+  > If it says "Certificate not yet created", wait 10-15 minutes and refresh. Do not proceed to the next step until you can visit the site on HTTPS.
 
 ## SSL Configuration
 
@@ -47,7 +48,7 @@ This step have to be done for both A and CNAME record.
 
 2. Set the encryption mode to Full.
 
->[!IMPORTANT]
+> [!IMPORTANT]
 > Do NOT use Fliexible.
 
 3. Go to Edge Certifacates sub-tab (under SSL/TLS).
