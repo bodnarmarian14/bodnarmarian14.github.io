@@ -48,9 +48,7 @@ This step have to be done for both A and CNAME record.
 2. Set the encryption mode to Full.
 
 >[!IMPORTANT]
-> TEST
-
-$${\color{red} Important: Do NOT use Fliexible.}$$
+> Do NOT use Fliexible.
 
 3. Go to Edge Certifacates sub-tab (under SSL/TLS).
 
