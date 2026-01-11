@@ -476,3 +476,122 @@ footer { background: var(--secondary); color: white; padding: 40px 20px 20px; ma
     font-size: 1.1em; /* Make flag slightly larger */
     border-radius: 2px; /* Optional: Slight rounded corners on flags */
 }
+
+/* =========================================
+   PDF GENERATION STYLES (CV Sidebar Layout)
+   ========================================= */
+
+/* 1. Layout Structure: Sidebar + Main Content */
+.generating-pdf .pdf-layout-wrapper {
+    display: grid;
+    grid-template-columns: 280px 1fr; /* Left Col 280px, Right Col fills rest */
+    min-height: 100vh;
+    align-items: stretch;
+}
+
+/* 2. Show the Sidebar */
+.generating-pdf .pdf-sidebar {
+    display: block !important;
+    background-color: #1e293b; /* Dark Sidebar */
+    color: white;
+    padding: 30px 20px;
+    height: 100%;
+    text-align: left;
+    -webkit-print-color-adjust: exact;
+}
+
+/* 3. Hide Web-Only Elements */
+.generating-pdf .web-only,
+.generating-pdf .navbar,
+.generating-pdf footer,
+.generating-pdf #read-more-btn {
+    display: none !important;
+}
+
+/* 4. Sidebar Internal Styling */
+.sidebar-profile {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.sidebar-profile img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.sidebar-profile h2 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.sidebar-profile p {
+    color: #94a3b8;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.sidebar-section { margin-bottom: 25px; }
+.sidebar-section h3 {
+    color: var(--primary);
+    border-bottom: 1px solid #475569;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    text-align: left;
+}
+
+/* Sidebar Contacts */
+.contact-list p {
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+/* Sidebar Tags (Skills) */
+.sidebar-tags span {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 4px 8px;
+    margin: 2px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+
+/* 5. Main Content Adjustments for PDF */
+.generating-pdf .pdf-main-content {
+    padding: 30px;
+    background: white;
+}
+.generating-pdf .section {
+    padding: 0;
+    margin-bottom: 30px;
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+}
+.generating-pdf h2 {
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+.generating-pdf h2::after { display: none; } /* Remove center dash */
+
+/* Force Grids to be 2 columns in PDF for Projects/Certs */
+.generating-pdf .project-grid, 
+.generating-pdf .cert-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+/* Ensure language text in sidebar is readable */
+.generating-pdf .lang-row {
+    color: #cbd5e1;
+}
