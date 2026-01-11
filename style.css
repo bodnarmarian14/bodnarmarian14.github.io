@@ -46,9 +46,37 @@ body {
 
 /* --- NAVBAR --- */
 .navbar {
-    position: sticky; top: 0; background: var(--white);
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 5%; box-shadow: var(--shadow); z-index: 1000;
+    background: #0f172a;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
+    transition: background 0.3s;
+}
+
+/* --- NAV LINKS --- */
+.nav-links li a {
+    text-decoration: none;
+    color: #cbd5e1; /* Light Grey (easier on eyes than pure white) */
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+/* Hover Effect */
+.nav-links li a:hover {
+    color: var(--primary); /* Keeps your primary blue/cyan hover color */
+}
+
+/* --- MOBILE MENU ICON (If you have one) --- */
+.menu-icon i {
+    color: #ffffff; /* Ensure hamburger menu is visible */
 }
 
 /* UPDATED LOGO STYLES */
