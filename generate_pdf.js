@@ -176,7 +176,7 @@ async function downloadPDF() {
                         <div style="margin-bottom: 30px; ${noSplit}">
                             <h3 style="color: ${color.textMain}; font-size: 18px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">About Me</h3>
                             <div style="font-size: 13px; color: #4a5568; text-align: justify; line-height: 1.6;">
-                                ${parseMd(data.about)}
+                                ${parseMd(data.shortDesc)}
                             </div>
                         </div>
 
