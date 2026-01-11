@@ -191,3 +191,11 @@ videos:
       Create a Kubernetes cluster on Digital Ocean using Terraform and Ansible. The Kubernetes cluster is formed by three droplets. 
       One of the droplets is used as a control plane or master of the cluster and the others are used as worker nodes. At the end 
       of the video, I display the cluster nodes and run a sample pod with the Nginx image.
+
+languages:
+  - name: "Romanian"
+    level: "Native"
+    countryCode: "ro"
+  - name: "English"
+    level: "Medium"
+    countryCode: "us"

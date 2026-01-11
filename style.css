@@ -426,3 +426,25 @@ footer { background: var(--secondary); color: white; padding: 40px 20px 20px; ma
 .repo-btn i {
     margin-right: 5px;
 }
+
+/* Container for the list */
+.languages-list {
+    display: flex;
+    flex-direction: column; /* This forces them one under another */
+    gap: 8px; /* Space between rows */
+}
+
+/* Individual Language Row */
+.lang-row {
+    display: flex;
+    align-items: center; /* Vertically aligns flag and text */
+    gap: 10px; /* Space between flag and text */
+    font-size: 0.9rem;
+    color: #ccc; /* Match your footer text color */
+}
+
+/* Flag Icon Tweaks */
+.lang-row i {
+    font-size: 1.1em; /* Make flag slightly larger */
+    border-radius: 2px; /* Optional: Slight rounded corners on flags */
+}

@@ -169,6 +169,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            // -- LANGUAGES --
+            const languagesContainer = document.getElementById('languages');
+            if (data.languages) {
+              let langHTML = '';
+              data.languages.forEach(lang => {
+                langHTML += `
+                  <div class="lang-row">
+                    <i class="fi fi-${lang.countryCode}"></i>
+                    <span>${lang.name} (${lang.level.toLowerCase()})</span>
+                  </div>`;
+            });
+              languagesContainer.innerHTML = langHTML;
+            }
 
             // -- VIDEOS --
             const videoContainer = document.getElementById('video-list');
