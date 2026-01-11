@@ -209,5 +209,5 @@ languages:
     level: "Native"
     countryCode: "ro"
   - name: "English"
-    level: "Medium"
+    level: "Intermediate"
     countryCode: "us"
