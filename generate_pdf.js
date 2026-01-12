@@ -8,7 +8,9 @@ async function downloadPDF() {
         const text = await response.text();
         const data = jsyaml.load(text);
 
-        // --- 2. IMAGE UTILS ---
+        // --- 2. HELPERS ---
+        
+        // A. Image Processor (Circular or Square)
         const getBase64Image = (url, isRound = false) => {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -37,6 +39,14 @@ async function downloadPDF() {
             });
         };
 
+        // B. Text Cleaner (FIXES THE "BLANK LINES" ISSUE)
+        // This replaces newlines with spaces, making text continuous.
+        const cleanText = (str) => {
+            if (!str) return '';
+            return str.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+        };
+
+        // Load Images
         const profileImg = await getBase64Image(data.profile.image, true);
         const certImages = [];
         if (data.certifications) {
@@ -47,16 +57,17 @@ async function downloadPDF() {
             }
         }
 
-        // --- 3. COLORS & ICONS ---
+        // --- 3. CONFIGURATION ---
         const colors = {
             blue: '#264886',
             sidebar: '#2d2d2d',
             textWhite: '#ffffff',
-            textGrey: '#c0c0c0',
+            textGrey: '#d1d1d1', // Slightly brighter for better read
             textDark: '#333333',
             divider: '#5a7ab0'
         };
 
+        // Icons (SVG Paths)
         const icons = {
             phone: 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
             email: 'M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z',
@@ -69,37 +80,33 @@ async function downloadPDF() {
 
         const createPill = (text, type) => {
             const isSidebar = type === 'sidebar';
-            const width = isSidebar ? 180 : 120; // Fixed width containers
+            const width = isSidebar ? 180 : 120;
             const height = 24;
             
             return {
-                columns: [
-                    {
-                        width: width,
-                        stack: [
-                            {
-                                // The Background Shape
-                                canvas: [{
-                                    type: 'rect', x: 0, y: 0, w: width, h: height, r: 12,
-                                    color: isSidebar ? null : colors.blue,
-                                    lineColor: isSidebar ? colors.divider : null,
-                                    lineWidth: 1
-                                }]
-                            },
-                            {
-                                // The Text Overlay (Centered relative to pill width)
-                                text: text.toUpperCase(),
-                                color: 'white',
-                                bold: true,
-                                fontSize: 10,
-                                alignment: 'center',
-                                margin: [0, -18, 0, 0] // Pull text UP onto the shape
-                            }
-                        ]
-                    }
-                ],
+                columns: [{
+                    width: width,
+                    stack: [
+                        {
+                            canvas: [{
+                                type: 'rect', x: 0, y: 0, w: width, h: height, r: 12,
+                                color: isSidebar ? null : colors.blue,
+                                lineColor: isSidebar ? colors.divider : null,
+                                lineWidth: 1
+                            }]
+                        },
+                        {
+                            text: text.toUpperCase(),
+                            color: 'white',
+                            bold: true,
+                            fontSize: 10, // Adjusted font size
+                            alignment: 'center',
+                            margin: [0, -18, 0, 0]
+                        }
+                    ]
+                }],
                 alignment: isSidebar ? 'center' : 'left',
-                margin: [0, 25, 0, 15] 
+                margin: [0, 25, 0, 15]
             };
         };
 
@@ -113,17 +120,16 @@ async function downloadPDF() {
             };
         };
 
-        // --- 5. LEFT COLUMN CONTENT ---
+        // --- 5. SIDEBAR CONTENT (Left) ---
         const leftContent = [];
         
         if (profileImg) {
-            // Added 10px margin top (plus global 40px = 50px visual space)
             leftContent.push({ image: profileImg, width: 130, height: 130, alignment: 'center', margin: [0, 10, 0, 25] });
         }
 
         leftContent.push(
             { text: 'About Me', style: 'h3_white', alignment: 'center' },
-            { text: data.shortDesc, style: 'p_grey', alignment: 'center', margin: [10, 5, 10, 25] }
+            { text: cleanText(data.shortDesc), style: 'p_grey', alignment: 'center', margin: [10, 5, 10, 25] }
         );
 
         leftContent.push({
@@ -164,90 +170,88 @@ async function downloadPDF() {
                 leftContent.push({
                     columns: [
                         { width: 25, stack: [ cImg ? { image: cImg, width: 20, height: 20 } : { text: '•', color: 'white'} ] },
-                        { width: '*', text: cert.title, color: 'white', fontSize: 10, margin: [0, 2, 0, 10] }
+                        { width: '*', text: cleanText(cert.title), color: 'white', fontSize: 10, margin: [0, 2, 0, 10] }
                     ],
                     margin: [20, 0, 10, 0]
                 });
             });
         }
 
-        // --- 6. RIGHT COLUMN CONTENT ---
+        // --- 6. MAIN CONTENT (Right) ---
         const rightContent = [];
 
-        // Header Text Block
-        // We use margin [0, 20, 0, 70].
-        // 20px Top = pushes text slightly down from the 40px page margin (aligns nicely in blue banner).
-        // 70px Bottom = Ensures the NEXT element starts BELOW the 180px blue banner.
+        // Header Name
         rightContent.push({
             stack: [
-                { text: data.profile.name.toUpperCase(), fontSize: 36, bold: true, color: 'white', letterSpacing: 1 },
-                { text: data.profile.role.toUpperCase(), fontSize: 14, color: 'white', letterSpacing: 3, margin: [0, 5, 0, 0] }
+                { text: data.profile.name.toUpperCase(), fontSize: 32, bold: true, color: 'white', letterSpacing: 1 },
+                { text: data.profile.role.toUpperCase(), fontSize: 13, color: 'white', letterSpacing: 3, margin: [0, 5, 0, 0] }
             ],
-            margin: [0, 20, 0, 70] 
+            margin: [0, 20, 0, 70] // Bottom margin ensures separation from Experience
         });
 
+        // Experience
         if (data.experience) {
             rightContent.push(createPill('Experience', 'main'));
             data.experience.forEach(job => {
                 rightContent.push({
                     stack: [
-                        { text: job.company, fontSize: 14, bold: true, color: colors.textDark },
+                        { text: job.company, fontSize: 13, bold: true, color: colors.textDark },
                         {
                             columns: [
-                                { text: job.role, fontSize: 12, bold: true, width: '*' },
-                                { text: job.date, fontSize: 11, italics: true, color: 'gray', alignment: 'right', width: 'auto' }
+                                { text: job.role, fontSize: 11, bold: true, width: '*' },
+                                { text: job.date, fontSize: 10, italics: true, color: '#666', alignment: 'right', width: 'auto' }
                             ]
                         },
-                        { text: job.desc, fontSize: 11, color: '#555', margin: [0, 5, 0, 15], lineHeight: 1.4 }
+                        // CLEANED TEXT: Removed newlines, tightened font size (10) and lineHeight (1.2)
+                        { text: cleanText(job.desc), fontSize: 10, color: '#444', margin: [0, 3, 0, 12], lineHeight: 1.2 }
                     ]
                 });
             });
         }
 
+        // Education
         if (data.education) {
             rightContent.push(createPill('Education', 'main'));
             data.education.forEach(edu => {
                 rightContent.push({
                     stack: [
-                        { text: edu.school, fontSize: 13, bold: true, color: colors.textDark },
-                        { text: edu.degree, fontSize: 12, margin: [0, 2, 0, 2] },
-                        { text: edu.date, fontSize: 11, color: 'gray', italics: true }
+                        { text: edu.school, fontSize: 12, bold: true, color: colors.textDark },
+                        { text: edu.degree, fontSize: 11, margin: [0, 1, 0, 1] },
+                        { text: edu.date, fontSize: 10, color: '#666', italics: true }
                     ],
                     margin: [0, 0, 0, 10]
                 });
             });
         }
 
+        // Projects
         if (data.projects) {
             rightContent.push(createPill('Projects', 'main'));
             data.projects.forEach(proj => {
                  rightContent.push({
                     stack: [
-                        { text: proj.title, fontSize: 13, bold: true, color: colors.textDark },
-                        { text: proj.desc, fontSize: 11, color: '#555' },
-                        { text: 'View Code', link: proj.repo, color: colors.blue, fontSize: 10, decoration: 'underline', margin: [0, 2, 0, 10]}
+                        { text: proj.title, fontSize: 12, bold: true, color: colors.textDark },
+                        { text: cleanText(proj.desc), fontSize: 10, color: '#444', lineHeight: 1.2 },
+                        { text: 'View Code', link: proj.repo, color: colors.blue, fontSize: 9, decoration: 'underline', margin: [0, 2, 0, 10]}
                     ]
                  });
             });
         }
 
-        // --- 7. DOCUMENT DEFINITION ---
+        // --- 7. GENERATE PDF ---
         const docDefinition = {
             pageSize: 'A4',
-            
-            // GLOBAL MARGINS (Top/Bottom 40px)
-            // This ensures Page 2+ starts 40px down, and Page 1 ends 40px up.
+            // Global margins: [Left, Top, Right, Bottom]
+            // This 40px Top/Bottom margin fixes the text touching edges issue.
             pageMargins: [0, 40, 0, 40], 
             
-            // BACKGROUND LAYERS (Ignore Margins)
             background: function(currentPage, pageSize) {
                 const bgs = [];
-                // 1. Sidebar Background (All Pages)
+                // Sidebar (Left 35%)
                 bgs.push({
                     type: 'rect', x: 0, y: 0, w: pageSize.width * 0.35, h: pageSize.height, color: colors.sidebar
                 });
-
-                // 2. Blue Header Banner (Page 1 Only)
+                // Header (Right Top, Page 1 Only)
                 if (currentPage === 1) {
                     bgs.push({
                         type: 'rect', x: pageSize.width * 0.35, y: 0, w: pageSize.width * 0.65, h: 180, color: colors.blue
@@ -259,28 +263,24 @@ async function downloadPDF() {
             content: [
                 {
                     columns: [
-                        // Left Column (Sidebar)
                         {
                             width: '35%',
                             stack: leftContent,
-                            // Internal Left/Right Padding
-                            margin: [15, 0, 15, 0] 
+                            margin: [15, 0, 15, 0] // Internal padding
                         },
-                        // Right Column (Main)
                         {
                             width: '65%',
                             stack: rightContent,
-                            // Internal Left/Right Padding
-                            margin: [40, 0, 40, 0] 
+                            margin: [40, 0, 40, 0] // Internal padding
                         }
                     ]
                 }
             ],
             
             styles: {
-                h3_white: { fontSize: 16, color: 'white', margin: [0, 0, 0, 5], bold: true },
-                p_grey: { fontSize: 11, color: colors.textGrey, lineHeight: 1.4 },
-                list_style: { fontSize: 11, color: colors.textGrey, markerColor: colors.blue }
+                h3_white: { fontSize: 15, color: 'white', margin: [0, 0, 0, 5], bold: true },
+                p_grey: { fontSize: 10, color: colors.textGrey, lineHeight: 1.3 },
+                list_style: { fontSize: 10, color: colors.textGrey, markerColor: colors.blue }
             },
             defaultStyle: { font: 'Roboto' }
         };
