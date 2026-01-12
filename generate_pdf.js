@@ -1,266 +1,291 @@
-/**
- * FINAL PDF GENERATOR
- * 1. Uses 'path' from YAML for local certification images.
- * 2. Converts local images to Base64 to ensure PDF rendering.
- * 3. Preserves all layout fixes (Padding, Full Bleed, Sidebar spacing).
- */
 async function downloadPDF() {
     const loading = document.getElementById('loading');
     if (loading) loading.style.display = 'flex';
 
     try {
+        // --- 1. DATA LOADING ---
         const response = await fetch('data.yaml');
         const text = await response.text();
         const data = jsyaml.load(text);
 
-        // --- 1. IMAGE LOADER HELPER ---
-        // Converts a path (local or remote) to a Base64 string.
-        // This is crucial for html2canvas to render images reliably.
-        const getDataUrl = (url) => {
+        // --- 2. IMAGE UTILS ---
+        const getBase64Image = (url, isRound = false) => {
             return new Promise((resolve) => {
                 const img = new Image();
-                // 'anonymous' is fine for local files served via http-server
-                img.crossOrigin = "Anonymous"; 
-                img.src = url;
+                img.setAttribute('crossOrigin', 'anonymous');
                 img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    try {
-                        resolve(canvas.toDataURL('image/png'));
-                    } catch (err) {
-                        console.warn("Error converting image:", url);
-                        resolve(null);
+                    const canvas = document.createElement("canvas");
+                    const size = Math.min(img.width, img.height);
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext("2d");
+                    if (isRound) {
+                        ctx.beginPath();
+                        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+                        ctx.closePath();
+                        ctx.clip();
+                        const x = (img.width - size) / 2;
+                        const y = (img.height - size) / 2;
+                        ctx.drawImage(img, x, y, size, size, 0, 0, size, size);
+                    } else {
+                        ctx.drawImage(img, 0, 0);
                     }
+                    resolve(canvas.toDataURL("image/png"));
                 };
-                // If local image is missing, return null to show icon
-                img.onerror = () => {
-                    console.warn("Could not load image at:", url);
-                    resolve(null); 
-                };
+                img.onerror = () => resolve(null);
+                img.src = url;
             });
         };
 
-        // --- 2. PRE-PROCESS CERTIFICATIONS ---
-        let certsHTML = '';
+        const profileImg = await getBase64Image(data.profile.image, true);
+        const certImages = [];
         if (data.certifications) {
-            const certPromises = data.certifications.map(async (cert) => {
-                
-                // CHANGE: We now look for 'cert.path' instead of 'cert.image'
-                // Ensure your YAML has: path: "images/my-cert.png"
-                const imagePath = cert.path || cert.image; 
-                const base64Img = await getDataUrl(imagePath);
-                
-                // Fallback: If image fails, show Trophy Icon
-                const imgContent = base64Img 
-                    ? `<img src="${base64Img}" style="width: 100%; height: 100%; object-fit: contain;">`
-                    : `<i class="fas fa-trophy" style="font-size: 20px; color: #264886;"></i>`;
-
-                return `
-                    <div style="display: flex; align-items: center; margin-bottom: 15px; page-break-inside: avoid;">
-                        <div style="width: 50px; height: 50px; margin-right: 12px; flex-shrink: 0; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 2px;">
-                            ${imgContent}
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <a href="${cert.link}" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 12px; display: block; line-height: 1.2; margin-bottom: 3px;">${cert.title}</a>
-                            <div style="color: #d1d5db; font-size: 11px; opacity: 0.8;">${cert.issuer}</div>
-                        </div>
-                    </div>`;
-            });
-            certsHTML = (await Promise.all(certPromises)).join('');
+            for (const cert of data.certifications) {
+                const path = cert.path || cert.image;
+                if (path) certImages.push(await getBase64Image(path, false));
+                else certImages.push(null);
+            }
         }
 
-        const pdfContainer = document.createElement('div');
-        pdfContainer.id = 'pdf-temp-template';
-        pdfContainer.style.width = '800px'; 
-        pdfContainer.style.background = '#ffffff';
-
-        const parseMd = (txt) => typeof marked !== 'undefined' ? marked.parse(txt || '') : txt;
-
-        const color = {
-            blue: "#264886",    
-            dark: "#1a1a1a",    
-            white: "#ffffff",
-            textMain: "#333333",
-            textLight: "#d1d5db"
+        // --- 3. COLORS & ICONS ---
+        const colors = {
+            blue: '#264886',
+            sidebar: '#2d2d2d',
+            textWhite: '#ffffff',
+            textGrey: '#c0c0c0',
+            textDark: '#333333',
+            divider: '#5a7ab0'
         };
 
-        const noSplit = "page-break-inside: avoid; break-inside: avoid;";
-
-        pdfContainer.innerHTML = `
-            <div style="font-family: 'Segoe UI', Arial, sans-serif; display: flex; width: 100%; min-height: 1000px; color: ${color.textMain};">
-                
-                <div style="width: 35%; background-color: ${color.dark}; color: ${color.white}; padding: 50px 20px; box-sizing: border-box; text-align: center;">
-                    
-                    <div style="margin-bottom: 30px; ${noSplit} display: flex; justify-content: center;">
-                        <img src="${data.profile.image}" crossorigin="anonymous" style="width: 140px; height: 140px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.1); object-fit: cover;">
-                    </div>
-
-                    <div style="text-align: left; margin-bottom: 30px; padding: 0 10px; ${noSplit}">
-                        <h3 style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Contact</h3>
-                        
-                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                            <div style="width: 25px; margin-right: 10px; text-align: center; color: ${color.blue};"><i class="fas fa-phone"></i></div>
-                            <div style="font-size: 13px; color: ${color.textLight}; word-break: break-all;">${data.profile.phone}</div>
-                        </div>
-
-                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                            <div style="width: 25px; margin-right: 10px; text-align: center; color: ${color.blue};"><i class="fas fa-envelope"></i></div>
-                            <div style="font-size: 13px; color: ${color.textLight}; word-break: break-all;">${data.profile.email}</div>
-                        </div>
-
-                        ${data.profile.website ? `
-                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                            <div style="width: 25px; margin-right: 10px; text-align: center; color: ${color.blue};"><i class="fa-solid fa-globe"></i></div>
-                            <div style="font-size: 13px; color: ${color.textLight};">
-                                <a href="${data.profile.website}" target="_blank" style="color: ${color.textLight}; text-decoration: none;">
-                                    ${data.profile.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                                </a>
-                            </div>
-                        </div>` : ''}
-
-                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                            <div style="width: 25px; margin-right: 10px; text-align: center; color: ${color.blue};"><i class="fas fa-map-marker-alt"></i></div>
-                            <div style="font-size: 13px; color: ${color.textLight};">${data.profile.location}</div>
-                        </div>
-
-                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start;">
-                            <div style="width: 25px; margin-right: 10px; text-align: center; color: ${color.blue};"><i class="fab fa-linkedin"></i></div>
-                            <div style="font-size: 13px; color: ${color.textLight};">
-                                <a href="${data.profile.linkedin}" style="color: ${color.textLight}; text-decoration: none;">Marian Bodnar</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    ${data.languages ? `
-                    <div style="text-align: left; margin-bottom: 30px; padding: 0 10px; ${noSplit}">
-                         <h3 style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Languages</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: ${color.textLight};">
-                            ${data.languages.map(lang => `
-                                <li style="margin-bottom: 8px; display: flex; justify-content: space-between;">
-                                    <span>${lang.name}</span>
-                                    <span style="opacity: 0.7; font-style: italic;">${lang.level}</span>
-                                </li>`).join('')}
-                        </ul>
-                    </div>` : ''}
-
-                    ${data.skills ? `
-                    <div style="text-align: left; margin-bottom: 30px; padding: 0 10px;">
-                        <h3 style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Skills</h3>
-                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: ${color.textLight};">
-                            ${data.skills.map(skill => `<li style="margin-bottom: 6px; ${noSplit}">• ${skill.name}</li>`).join('')}
-                        </ul>
-                    </div>` : ''}
-
-                    ${data.certifications ? `
-                    <div style="text-align: left; margin-bottom: 30px; padding: 0 10px; ${noSplit}">
-                        <h3 style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Certifications</h3>
-                        ${certsHTML}
-                    </div>` : ''}
-
-                </div>
-
-                <div style="width: 65%; background-color: ${color.white}; padding-bottom: 50px;">
-                    
-                    <div style="background-color: ${color.blue}; padding: 50px 40px 30px 40px; box-sizing: border-box; ${noSplit}">
-                        <h1 style="margin: 0; font-size: 38px; text-transform: uppercase; color: ${color.white}; line-height: 1; font-weight: bold;">
-                            ${data.profile.name}
-                        </h1>
-                        <p style="margin: 10px 0 0 0; font-size: 16px; color: ${color.white}; opacity: 0.9; letter-spacing: 2px; text-transform: uppercase;">${data.profile.role}</p>
-                    </div>
-
-                    <div style="padding: 30px 40px 0 40px;">
-                        
-                        <div style="margin-bottom: 30px; ${noSplit}">
-                            <h3 style="color: ${color.textMain}; font-size: 18px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">About Me</h3>
-                            <div style="font-size: 13px; color: #4a5568; text-align: justify; line-height: 1.6;">
-                                ${parseMd(data.shortDesc)}
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 10px;">
-                            <div style="background-color: ${color.blue}; color: ${color.white}; padding: 6px 25px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; ${noSplit}">
-                                Experience
-                            </div>
-                            
-                            ${data.experience.map(job => `
-                                <div style="margin-bottom: 25px; ${noSplit}">
-                                    <div style="font-weight: bold; font-size: 15px; color: ${color.textMain};">${job.company}</div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                        <div style="font-size: 13px; font-weight: bold; color: ${color.textMain};">${job.role}</div>
-                                        <div style="font-size: 12px; color: #718096; font-style: italic;">${job.date}</div>
-                                    </div>
-                                    <div style="font-size: 13px; color: #4a5568; text-align: justify; line-height: 1.4;">
-                                        ${parseMd(job.desc)}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <div style="margin-bottom: 10px;">
-                            <div style="background-color: ${color.blue}; color: ${color.white}; padding: 6px 25px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; ${noSplit}">
-                                Education
-                            </div>
-                            
-                            ${data.education ? data.education.map(edu => `
-                                <div style="margin-bottom: 20px; ${noSplit}">
-                                    <div style="font-weight: bold; font-size: 14px; color: ${color.textMain};">${edu.school}</div>
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <div style="font-size: 13px; color: ${color.textMain};">${edu.degree}</div>
-                                        <div style="font-size: 12px; color: #718096;">${edu.date}</div>
-                                    </div>
-                                </div>
-                            `).join('') : ''}
-                        </div>
-
-                         ${data.projects ? `
-                        <div style="margin-bottom: 10px;">
-                            <div style="background-color: ${color.blue}; color: ${color.white}; padding: 6px 25px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; ${noSplit}">
-                                Projects
-                            </div>
-                            ${data.projects.map(proj => `
-                                <div style="margin-bottom: 15px; ${noSplit}">
-                                    <div style="font-weight: bold; color: ${color.textMain}; font-size: 14px;">${proj.title}</div>
-                                    <div style="font-size: 13px; color: #4a5568; margin-bottom: 2px;">${parseMd(proj.desc)}</div>
-                                    <a href="${proj.repo}" style="color: ${color.blue}; font-size: 12px;">View Code</a>
-                                </div>
-                            `).join('')}
-                        </div>` : ''}
-
-                        ${data.videos ? `
-                        <div style="margin-bottom: 10px;">
-                            <div style="background-color: ${color.blue}; color: ${color.white}; padding: 6px 25px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; ${noSplit}">
-                                Demos
-                            </div>
-                            ${data.videos.map(video => `
-                                <div style="margin-bottom: 15px; ${noSplit}">
-                                    <div style="font-weight: bold; color: ${color.textMain}; font-size: 14px;">${video.title}</div>
-                                    <div style="font-size: 13px; color: #4a5568; margin-bottom: 4px; text-align: justify; line-height: 1.4;">
-                                        ${parseMd(video.desc)}
-                                    </div>
-                                    <a href="https://youtu.be/${video.id}" target="_blank" style="color: ${color.blue}; font-size: 12px; text-decoration: none; display: flex; align-items: center;">
-                                        <i class="fab fa-youtube" style="margin-right: 5px;"></i> Watch Video
-                                    </a>
-                                </div>
-                            `).join('')}
-                        </div>` : ''}
-
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const opt = {
-            margin: 0, 
-            filename: `${data.profile.name.replace(/\s+/g, '_')}_CV.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        const icons = {
+            phone: 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
+            email: 'M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z',
+            location: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+            linkedin: 'M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z',
+            web: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'
         };
 
-        await html2pdf().set(opt).from(pdfContainer).save();
+        // --- 4. COMPONENT BUILDERS ---
+
+        const createPill = (text, type) => {
+            const isSidebar = type === 'sidebar';
+            const width = isSidebar ? 180 : 120; // Fixed width containers
+            const height = 24;
+            
+            return {
+                columns: [
+                    {
+                        width: width,
+                        stack: [
+                            {
+                                // The Background Shape
+                                canvas: [{
+                                    type: 'rect', x: 0, y: 0, w: width, h: height, r: 12,
+                                    color: isSidebar ? null : colors.blue,
+                                    lineColor: isSidebar ? colors.divider : null,
+                                    lineWidth: 1
+                                }]
+                            },
+                            {
+                                // The Text Overlay (Centered relative to pill width)
+                                text: text.toUpperCase(),
+                                color: 'white',
+                                bold: true,
+                                fontSize: 10,
+                                alignment: 'center',
+                                margin: [0, -18, 0, 0] // Pull text UP onto the shape
+                            }
+                        ]
+                    }
+                ],
+                alignment: isSidebar ? 'center' : 'left',
+                margin: [0, 25, 0, 15] 
+            };
+        };
+
+        const iconRow = (path, textVal) => {
+            if (!textVal) return null;
+            return {
+                columns: [
+                    { width: 14, svg: `<svg viewBox="0 0 24 24"><path fill="${colors.blue}" d="${path}"/></svg>`, margin: [0, 2, 0, 0] },
+                    { width: '*', text: textVal, fontSize: 10, color: colors.textGrey, margin: [6, 0, 0, 6] }
+                ]
+            };
+        };
+
+        // --- 5. LEFT COLUMN CONTENT ---
+        const leftContent = [];
+        
+        if (profileImg) {
+            // Added 10px margin top (plus global 40px = 50px visual space)
+            leftContent.push({ image: profileImg, width: 130, height: 130, alignment: 'center', margin: [0, 10, 0, 25] });
+        }
+
+        leftContent.push(
+            { text: 'About Me', style: 'h3_white', alignment: 'center' },
+            { text: data.shortDesc, style: 'p_grey', alignment: 'center', margin: [10, 5, 10, 25] }
+        );
+
+        leftContent.push({
+            stack: [
+                iconRow(icons.phone, data.profile.phone),
+                iconRow(icons.email, data.profile.email),
+                iconRow(icons.location, data.profile.location),
+                iconRow(icons.web, data.profile.website),
+                iconRow(icons.linkedin, data.profile.linkedin ? "LinkedIn Profile" : null)
+            ].filter(Boolean),
+            margin: [10, 0, 10, 25]
+        });
+
+        if (data.languages) {
+            leftContent.push(createPill('Language', 'sidebar'));
+            leftContent.push({
+                ul: data.languages.map(l => ({
+                    text: [{ text: l.name, bold: true, color: 'white' }, { text: ` (${l.level})`, color: colors.textGrey }]
+                })),
+                style: 'list_style',
+                margin: [25, 0, 10, 0]
+            });
+        }
+
+        if (data.skills) {
+            leftContent.push(createPill('Skills', 'sidebar'));
+            leftContent.push({
+                ul: data.skills.map(s => s.name),
+                style: 'list_style',
+                margin: [25, 0, 10, 0]
+            });
+        }
+
+        if (data.certifications) {
+            leftContent.push(createPill('Certifications', 'sidebar'));
+            data.certifications.forEach((cert, i) => {
+                const cImg = certImages[i];
+                leftContent.push({
+                    columns: [
+                        { width: 25, stack: [ cImg ? { image: cImg, width: 20, height: 20 } : { text: '•', color: 'white'} ] },
+                        { width: '*', text: cert.title, color: 'white', fontSize: 10, margin: [0, 2, 0, 10] }
+                    ],
+                    margin: [20, 0, 10, 0]
+                });
+            });
+        }
+
+        // --- 6. RIGHT COLUMN CONTENT ---
+        const rightContent = [];
+
+        // Header Text Block
+        // We use margin [0, 20, 0, 70].
+        // 20px Top = pushes text slightly down from the 40px page margin (aligns nicely in blue banner).
+        // 70px Bottom = Ensures the NEXT element starts BELOW the 180px blue banner.
+        rightContent.push({
+            stack: [
+                { text: data.profile.name.toUpperCase(), fontSize: 36, bold: true, color: 'white', letterSpacing: 1 },
+                { text: data.profile.role.toUpperCase(), fontSize: 14, color: 'white', letterSpacing: 3, margin: [0, 5, 0, 0] }
+            ],
+            margin: [0, 20, 0, 70] 
+        });
+
+        if (data.experience) {
+            rightContent.push(createPill('Experience', 'main'));
+            data.experience.forEach(job => {
+                rightContent.push({
+                    stack: [
+                        { text: job.company, fontSize: 14, bold: true, color: colors.textDark },
+                        {
+                            columns: [
+                                { text: job.role, fontSize: 12, bold: true, width: '*' },
+                                { text: job.date, fontSize: 11, italics: true, color: 'gray', alignment: 'right', width: 'auto' }
+                            ]
+                        },
+                        { text: job.desc, fontSize: 11, color: '#555', margin: [0, 5, 0, 15], lineHeight: 1.4 }
+                    ]
+                });
+            });
+        }
+
+        if (data.education) {
+            rightContent.push(createPill('Education', 'main'));
+            data.education.forEach(edu => {
+                rightContent.push({
+                    stack: [
+                        { text: edu.school, fontSize: 13, bold: true, color: colors.textDark },
+                        { text: edu.degree, fontSize: 12, margin: [0, 2, 0, 2] },
+                        { text: edu.date, fontSize: 11, color: 'gray', italics: true }
+                    ],
+                    margin: [0, 0, 0, 10]
+                });
+            });
+        }
+
+        if (data.projects) {
+            rightContent.push(createPill('Projects', 'main'));
+            data.projects.forEach(proj => {
+                 rightContent.push({
+                    stack: [
+                        { text: proj.title, fontSize: 13, bold: true, color: colors.textDark },
+                        { text: proj.desc, fontSize: 11, color: '#555' },
+                        { text: 'View Code', link: proj.repo, color: colors.blue, fontSize: 10, decoration: 'underline', margin: [0, 2, 0, 10]}
+                    ]
+                 });
+            });
+        }
+
+        // --- 7. DOCUMENT DEFINITION ---
+        const docDefinition = {
+            pageSize: 'A4',
+            
+            // GLOBAL MARGINS (Top/Bottom 40px)
+            // This ensures Page 2+ starts 40px down, and Page 1 ends 40px up.
+            pageMargins: [0, 40, 0, 40], 
+            
+            // BACKGROUND LAYERS (Ignore Margins)
+            background: function(currentPage, pageSize) {
+                const bgs = [];
+                // 1. Sidebar Background (All Pages)
+                bgs.push({
+                    type: 'rect', x: 0, y: 0, w: pageSize.width * 0.35, h: pageSize.height, color: colors.sidebar
+                });
+
+                // 2. Blue Header Banner (Page 1 Only)
+                if (currentPage === 1) {
+                    bgs.push({
+                        type: 'rect', x: pageSize.width * 0.35, y: 0, w: pageSize.width * 0.65, h: 180, color: colors.blue
+                    });
+                }
+                return { canvas: bgs };
+            },
+
+            content: [
+                {
+                    columns: [
+                        // Left Column (Sidebar)
+                        {
+                            width: '35%',
+                            stack: leftContent,
+                            // Internal Left/Right Padding
+                            margin: [15, 0, 15, 0] 
+                        },
+                        // Right Column (Main)
+                        {
+                            width: '65%',
+                            stack: rightContent,
+                            // Internal Left/Right Padding
+                            margin: [40, 0, 40, 0] 
+                        }
+                    ]
+                }
+            ],
+            
+            styles: {
+                h3_white: { fontSize: 16, color: 'white', margin: [0, 0, 0, 5], bold: true },
+                p_grey: { fontSize: 11, color: colors.textGrey, lineHeight: 1.4 },
+                list_style: { fontSize: 11, color: colors.textGrey, markerColor: colors.blue }
+            },
+            defaultStyle: { font: 'Roboto' }
+        };
+
+        pdfMake.createPdf(docDefinition).download(`${data.profile.name.replace(/\s+/g, '_')}_CV.pdf`);
 
     } catch (error) {
         console.error("PDF Generation Error:", error);
