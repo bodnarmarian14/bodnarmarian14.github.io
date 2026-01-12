@@ -9,8 +9,8 @@ async function downloadPDF() {
         const data = jsyaml.load(text);
 
         // --- 2. HELPERS ---
-        
-        // A. Image Processor (Circular or Square)
+
+        // A. Image Processor
         const getBase64Image = (url, isRound = false) => {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -39,11 +39,10 @@ async function downloadPDF() {
             });
         };
 
-        // B. Text Cleaner (FIXES THE "BLANK LINES" ISSUE)
-        // This replaces newlines with spaces, making text continuous.
+        // B. Text Cleaner
         const cleanText = (str) => {
             if (!str) return '';
-            return str.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            return str.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
         };
 
         // Load Images
@@ -62,12 +61,11 @@ async function downloadPDF() {
             blue: '#264886',
             sidebar: '#2d2d2d',
             textWhite: '#ffffff',
-            textGrey: '#d1d1d1', // Slightly brighter for better read
+            textGrey: '#d1d1d1',
             textDark: '#333333',
             divider: '#5a7ab0'
         };
 
-        // Icons (SVG Paths)
         const icons = {
             phone: 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
             email: 'M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z',
@@ -81,7 +79,7 @@ async function downloadPDF() {
         const createPill = (text, type) => {
             const isSidebar = type === 'sidebar';
             const width = isSidebar ? 180 : 120;
-            const height = 24;
+            const height = 22;
             
             return {
                 columns: [{
@@ -89,7 +87,7 @@ async function downloadPDF() {
                     stack: [
                         {
                             canvas: [{
-                                type: 'rect', x: 0, y: 0, w: width, h: height, r: 12,
+                                type: 'rect', x: 0, y: 0, w: width, h: height, r: 11,
                                 color: isSidebar ? null : colors.blue,
                                 lineColor: isSidebar ? colors.divider : null,
                                 lineWidth: 1
@@ -99,24 +97,51 @@ async function downloadPDF() {
                             text: text.toUpperCase(),
                             color: 'white',
                             bold: true,
-                            fontSize: 10, // Adjusted font size
+                            fontSize: 9,
                             alignment: 'center',
-                            margin: [0, -18, 0, 0]
+                            margin: [0, -16, 0, 0] 
                         }
                     ]
                 }],
                 alignment: isSidebar ? 'center' : 'left',
-                margin: [0, 25, 0, 15]
+                margin: [0, 10, 0, 15] 
             };
         };
 
-        const iconRow = (path, textVal) => {
+        // UPDATED: Accepts linkUrl, creates link, REMOVES decoration (underline)
+        const iconRow = (path, textVal, linkUrl = null) => {
             if (!textVal) return null;
             return {
                 columns: [
-                    { width: 14, svg: `<svg viewBox="0 0 24 24"><path fill="${colors.blue}" d="${path}"/></svg>`, margin: [0, 2, 0, 0] },
-                    { width: '*', text: textVal, fontSize: 10, color: colors.textGrey, margin: [6, 0, 0, 6] }
+                    { width: 14, svg: `<svg viewBox="0 0 24 24"><path fill="${colors.blue}" d="${path}"/></svg>`, margin: [0, 0, 0, 0] },
+                    { 
+                        width: '*', 
+                        text: textVal, 
+                        fontSize: 9, 
+                        color: colors.textGrey,
+                        margin: [6, 3, 0, 6],
+                        link: linkUrl, 
+                        decoration: null // Removes underline while keeping it clickable
+                    }
                 ]
+            };
+        };
+
+        const createListItem = (text, subtext = null) => {
+            return {
+                unbreakable: true, 
+                columns: [
+                    { width: 10, text: '•', color: colors.blue, fontSize: 10 },
+                    { 
+                        width: '*', 
+                        text: subtext 
+                            ? [{ text: text, bold: true, color: 'white' }, { text: ` (${subtext})`, color: colors.textGrey }] 
+                            : text,
+                        fontSize: 9, 
+                        color: subtext ? 'white' : colors.textGrey
+                    }
+                ],
+                margin: [0, 0, 0, 5] 
             };
         };
 
@@ -124,32 +149,32 @@ async function downloadPDF() {
         const leftContent = [];
         
         if (profileImg) {
-            leftContent.push({ image: profileImg, width: 130, height: 130, alignment: 'center', margin: [0, 10, 0, 25] });
+            leftContent.push({ image: profileImg, width: 120, height: 120, alignment: 'center', margin: [0, 10, 0, 20] });
         }
 
         leftContent.push(
             { text: 'About Me', style: 'h3_white', alignment: 'center' },
-            { text: cleanText(data.shortDesc), style: 'p_grey', alignment: 'center', margin: [10, 5, 10, 25] }
+            { text: cleanText(data.shortDesc), style: 'p_grey', alignment: 'center', margin: [10, 5, 10, 20] }
         );
 
+        // CONTACT SECTION
         leftContent.push({
             stack: [
                 iconRow(icons.phone, data.profile.phone),
                 iconRow(icons.email, data.profile.email),
                 iconRow(icons.location, data.profile.location),
-                iconRow(icons.web, data.profile.website),
-                iconRow(icons.linkedin, data.profile.linkedin ? "LinkedIn Profile" : null)
+                // Pass Link for Website
+                iconRow(icons.web, data.profile.website, data.profile.website),
+                // Pass Link for LinkedIn
+                iconRow(icons.linkedin, data.profile.linkedin ? "LinkedIn Profile" : null, "https://www." + data.profile.linkedin)
             ].filter(Boolean),
-            margin: [10, 0, 10, 25]
+            margin: [10, 0, 10, 5] 
         });
 
         if (data.languages) {
             leftContent.push(createPill('Language', 'sidebar'));
             leftContent.push({
-                ul: data.languages.map(l => ({
-                    text: [{ text: l.name, bold: true, color: 'white' }, { text: ` (${l.level})`, color: colors.textGrey }]
-                })),
-                style: 'list_style',
+                stack: data.languages.map(l => createListItem(l.name, l.level)),
                 margin: [25, 0, 10, 0]
             });
         }
@@ -157,8 +182,7 @@ async function downloadPDF() {
         if (data.skills) {
             leftContent.push(createPill('Skills', 'sidebar'));
             leftContent.push({
-                ul: data.skills.map(s => s.name),
-                style: 'list_style',
+                stack: data.skills.map(s => createListItem(s.name)),
                 margin: [25, 0, 10, 0]
             });
         }
@@ -168,11 +192,21 @@ async function downloadPDF() {
             data.certifications.forEach((cert, i) => {
                 const cImg = certImages[i];
                 leftContent.push({
+                    unbreakable: true,
                     columns: [
-                        { width: 25, stack: [ cImg ? { image: cImg, width: 20, height: 20 } : { text: '•', color: 'white'} ] },
-                        { width: '*', text: cleanText(cert.title), color: 'white', fontSize: 10, margin: [0, 2, 0, 10] }
+                        // BIGGER ICON COLUMN (40px width, 30px image)
+                        { width: 40, stack: [ cImg ? { image: cImg, width: 30, height: 30 } : { text: '•', color: 'white'} ] },
+                        { 
+                            width: '*', 
+                            text: cleanText(cert.title), 
+                            color: 'white', 
+                            fontSize: 9, 
+                            margin: [0, 8, 0, 8],
+                            link: cert.link, // LINK TO CREDLY
+                            decoration: null // NO UNDERLINE
+                        }
                     ],
-                    margin: [20, 0, 10, 0]
+                    margin: [20, 0, 10, 5] 
                 });
             });
         }
@@ -180,59 +214,55 @@ async function downloadPDF() {
         // --- 6. MAIN CONTENT (Right) ---
         const rightContent = [];
 
-        // Header Name
         rightContent.push({
             stack: [
-                { text: data.profile.name.toUpperCase(), fontSize: 32, bold: true, color: 'white', letterSpacing: 1 },
-                { text: data.profile.role.toUpperCase(), fontSize: 13, color: 'white', letterSpacing: 3, margin: [0, 5, 0, 0] }
+                { text: data.profile.name.toUpperCase(), fontSize: 30, bold: true, color: 'white', letterSpacing: 1 },
+                { text: data.profile.role.toUpperCase(), fontSize: 12, color: 'white', letterSpacing: 2, margin: [0, 4, 0, 0] }
             ],
-            margin: [0, 20, 0, 70] // Bottom margin ensures separation from Experience
+            margin: [0, 20, 0, 70] 
         });
 
-        // Experience
         if (data.experience) {
             rightContent.push(createPill('Experience', 'main'));
             data.experience.forEach(job => {
                 rightContent.push({
                     stack: [
-                        { text: job.company, fontSize: 13, bold: true, color: colors.textDark },
+                        { text: job.company, fontSize: 12, bold: true, color: colors.textDark },
                         {
                             columns: [
-                                { text: job.role, fontSize: 11, bold: true, width: '*' },
-                                { text: job.date, fontSize: 10, italics: true, color: '#666', alignment: 'right', width: 'auto' }
-                            ]
+                                { text: job.role, fontSize: 10, bold: true, width: '*' },
+                                { text: job.date, fontSize: 9, italics: true, color: '#666', alignment: 'right', width: 'auto' }
+                            ],
+                            margin: [0, 0, 0, 6] 
                         },
-                        // CLEANED TEXT: Removed newlines, tightened font size (10) and lineHeight (1.2)
-                        { text: cleanText(job.desc), fontSize: 10, color: '#444', margin: [0, 3, 0, 12], lineHeight: 1.2 }
+                        { text: cleanText(job.desc), fontSize: 9, color: '#444', margin: [0, 0, 0, 15], lineHeight: 1.1 }
                     ]
                 });
             });
         }
 
-        // Education
         if (data.education) {
             rightContent.push(createPill('Education', 'main'));
             data.education.forEach(edu => {
                 rightContent.push({
                     stack: [
-                        { text: edu.school, fontSize: 12, bold: true, color: colors.textDark },
-                        { text: edu.degree, fontSize: 11, margin: [0, 1, 0, 1] },
-                        { text: edu.date, fontSize: 10, color: '#666', italics: true }
+                        { text: edu.school, fontSize: 11, bold: true, color: colors.textDark },
+                        { text: edu.degree, fontSize: 10, margin: [0, 2, 0, 2] },
+                        { text: edu.date, fontSize: 9, color: '#666', italics: true }
                     ],
                     margin: [0, 0, 0, 10]
                 });
             });
         }
 
-        // Projects
         if (data.projects) {
             rightContent.push(createPill('Projects', 'main'));
             data.projects.forEach(proj => {
                  rightContent.push({
                     stack: [
-                        { text: proj.title, fontSize: 12, bold: true, color: colors.textDark },
-                        { text: cleanText(proj.desc), fontSize: 10, color: '#444', lineHeight: 1.2 },
-                        { text: 'View Code', link: proj.repo, color: colors.blue, fontSize: 9, decoration: 'underline', margin: [0, 2, 0, 10]}
+                        { text: proj.title, fontSize: 11, bold: true, color: colors.textDark },
+                        { text: cleanText(proj.desc), fontSize: 9, color: '#444', margin: [0, 4, 0, 4], lineHeight: 1.1 },
+                        { text: 'View Code', link: proj.repo, color: colors.blue, fontSize: 9, decoration: 'underline', margin: [0, 2, 0, 12]}
                     ]
                  });
             });
@@ -241,17 +271,13 @@ async function downloadPDF() {
         // --- 7. GENERATE PDF ---
         const docDefinition = {
             pageSize: 'A4',
-            // Global margins: [Left, Top, Right, Bottom]
-            // This 40px Top/Bottom margin fixes the text touching edges issue.
             pageMargins: [0, 40, 0, 40], 
             
             background: function(currentPage, pageSize) {
                 const bgs = [];
-                // Sidebar (Left 35%)
                 bgs.push({
                     type: 'rect', x: 0, y: 0, w: pageSize.width * 0.35, h: pageSize.height, color: colors.sidebar
                 });
-                // Header (Right Top, Page 1 Only)
                 if (currentPage === 1) {
                     bgs.push({
                         type: 'rect', x: pageSize.width * 0.35, y: 0, w: pageSize.width * 0.65, h: 180, color: colors.blue
@@ -266,23 +292,22 @@ async function downloadPDF() {
                         {
                             width: '35%',
                             stack: leftContent,
-                            margin: [15, 0, 15, 0] // Internal padding
+                            margin: [15, 0, 15, 0] 
                         },
                         {
                             width: '65%',
                             stack: rightContent,
-                            margin: [40, 0, 40, 0] // Internal padding
+                            margin: [40, 0, 40, 0] 
                         }
                     ]
                 }
             ],
             
             styles: {
-                h3_white: { fontSize: 15, color: 'white', margin: [0, 0, 0, 5], bold: true },
-                p_grey: { fontSize: 10, color: colors.textGrey, lineHeight: 1.3 },
-                list_style: { fontSize: 10, color: colors.textGrey, markerColor: colors.blue }
+                h3_white: { fontSize: 14, color: 'white', margin: [0, 0, 0, 5], bold: true },
+                p_grey: { fontSize: 9, color: colors.textGrey, lineHeight: 1.2 }
             },
-            defaultStyle: { font: 'Roboto' }
+            defaultStyle: { font: 'Roboto', fontSize: 9 }
         };
 
         pdfMake.createPdf(docDefinition).download(`${data.profile.name.replace(/\s+/g, '_')}_CV.pdf`);
