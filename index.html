@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio and CV of Marian Bodnar - Platform & DevOps Engineer">
     <title>Marian Bodnar | Platform & DevOps Engineer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     <link rel="stylesheet" href="style.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="icon" type="image/png" href="images/logo/website-logo.png">
 
-    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -23,10 +24,10 @@
         <p>Generating PDF...</p>
     </div>
 
-    <nav class="navbar" data-html2canvas-ignore="true">
+    <nav class="navbar">
         <a href="#home" class="logo">
-          <img src="images/logo/website-logo.png" alt="Logo" class="logo-img">
-          <span class="logo-text"></span>
+            <img src="images/logo/website-logo.png" alt="Marian Bodnar Logo" class="logo-img">
+            <span class="logo-text"></span>
         </a>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
@@ -38,7 +39,7 @@
             <li><a href="#education">Education</a></li>
             <li><a href="#videos">Videos</a></li>
         </ul>
-        <button id="downloadBtn" class="btn-primary">
+        <button id="downloadBtn" class="btn-primary" aria-label="Download CV as PDF">
             <i class="fas fa-file-download"></i> Download PDF
         </button>
     </nav>
@@ -47,13 +48,11 @@
         <div class="pdf-layout-wrapper">
             
             <aside class="pdf-sidebar" style="display: none;">
-                
                 <div class="sidebar-profile">
                     <img src="" id="sidebar-img" alt="Profile">
-                    <h2 id="sidebar-name">Name</h2>
-                    <p id="sidebar-role">Role</p>
+                    <h2 id="sidebar-name"></h2>
+                    <p id="sidebar-role"></p>
                 </div>
-
                 <div class="sidebar-section">
                     <h3>Contact</h3>
                     <div class="contact-list">
@@ -63,12 +62,10 @@
                         <p><i class="fab fa-linkedin"></i> <span id="sidebar-linkedin"></span></p>
                     </div>
                 </div>
-
                 <div class="sidebar-section">
                     <h3>Languages</h3>
                     <div id="sidebar-languages" class="languages-list"></div>
                 </div>
-
                 <div class="sidebar-section">
                     <h3>Skills</h3>
                     <div id="sidebar-skills" class="skill-tags sidebar-tags"></div>
@@ -79,7 +76,7 @@
                 
                 <section id="home" class="hero web-only">
                     <div class="hero-content">
-                        <img src="" alt="Profile" class="profile-img" id="profile-img">
+                        <img src="" alt="Profile Photo" class="profile-img" id="profile-img">
                         <h1 id="profile-name">Loading...</h1>
                         <p id="profile-role">Loading...</p>
                         <div class="pdf-contact-info">
@@ -90,9 +87,7 @@
 
                 <section id="about" class="section">
                     <h2>About Me</h2>
-                    <div id="about-content" class="markdown-content line-clamp">
-                        Loading...
-                    </div>
+                    <div id="about-content" class="markdown-content line-clamp">Loading...</div>
                     <button id="read-more-btn" class="read-more-btn web-only">Read More</button>
                 </section>
 
@@ -109,13 +104,13 @@
                 </section>
 
                 <section id="certs" class="section">
-                  <h2>Certifications</h2>
-                  <div class="cert-grid" id="cert-list"></div>
+                    <h2>Certifications</h2>
+                    <div class="cert-grid" id="cert-list"></div>
                 </section>
 
                 <section id="projects" class="section">
-                  <h2>Projects</h2>
-                  <div class="project-grid" id="project-list"></div>
+                    <h2>Projects</h2>
+                    <div class="project-grid" id="project-list"></div>
                 </section>
 
                 <section id="education" class="section">
@@ -124,13 +119,15 @@
                 </section>
 
                 <section id="videos" class="section">
-                  <h2>Video Demos</h2>
-                  <div id="video-list"></div>
+                    <h2>Video Demos</h2>
+                    <div id="video-list"></div>
                 </section>
 
-            </div> </div> </main>
+            </div> 
+        </div> 
+    </main>
 
-    <footer data-html2canvas-ignore="true">
+    <footer>
         <div class="footer-container">
             <div class="footer-col">
                 <h3>Contact</h3>
@@ -139,29 +136,27 @@
                 <p><i class="fas fa-map-marker-alt"></i> <span id="footer-location"></span></p>
             </div>
             <div class="footer-col">
-              <h3>Languages</h3>
-              <div id="footer-languages" class="languages-list"></div>
+                <h3>Languages</h3>
+                <div id="footer-languages" class="languages-list"></div>
             </div>
             <div class="footer-col">
                 <h3>Socials</h3>
                 <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/marian-bodnar-411948261"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/bmarian98"><i class="fab fa-github"></i></a>
-                    <a href="https://gitlab.com/devops-project23"><i class="fab fa-gitlab"></i></a>
+                    <a href="#" id="link-linkedin" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" id="link-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" id="link-gitlab" target="_blank" aria-label="GitLab"><i class="fab fa-gitlab"></i></a>
                 </div>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>
-                &copy; <span id="year"></span> <span id="footer-name"></span>. All Rights Reserved.
-            </p>
+            <p>&copy; <span id="year"></span> <span id="footer-name"></span>. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    
     <script src="generate_pdf.js"></script>
     <script src="script.js"></script>
 </body>
