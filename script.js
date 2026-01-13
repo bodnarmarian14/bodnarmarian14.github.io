@@ -1,249 +1,191 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // --- 1. HELPERS ---
+    const getEl = (id) => document.getElementById(id);
+    const setText = (id, txt) => { const el = getEl(id); if (el) el.textContent = txt; };
+    const setSrc = (id, src) => { const el = getEl(id); if (el) el.src = src; };
+    const setHtml = (id, html) => { const el = getEl(id); if (el) el.innerHTML = html; };
+    
+    // Efficiently handles "Read More" logic
+    const initReadMore = (containerId, btnId) => {
+        const container = getEl(containerId);
+        const btn = getEl(btnId);
+        if (!container || !btn) return;
 
-    // --- 1. YAML LOADING & PAGE POPULATION ---
-    fetch('data.yaml')
-        .then(response => response.text())
-        .then(text => {
-            const data = jsyaml.load(text);
-
-            // General Info
-            const year = new Date().getFullYear();
-            document.getElementById('year').textContent = year;
-            document.getElementById('footer-name').textContent = data.profile.name;
-
-            // Profile (Main Web)
-            document.getElementById('profile-name').textContent = data.profile.name;
-            document.getElementById('profile-role').textContent = data.profile.role;
-            document.getElementById('profile-img').src = data.profile.image;
-
-            // Profile (PDF Sidebar)
-            document.getElementById('sidebar-img').src = data.profile.image;
-            document.getElementById('sidebar-name').textContent = data.profile.name;
-            document.getElementById('sidebar-role').textContent = data.profile.role;
-            document.getElementById('sidebar-email').textContent = data.profile.email;
-            document.getElementById('sidebar-phone').textContent = data.profile.phone;
-            document.getElementById('sidebar-location').textContent = data.profile.location;
-            document.getElementById('sidebar-linkedin').textContent = data.profile.linkedin;
-
-            // PDF Contact (Legacy)
-            const contactHTML = `
-                <i class="fas fa-envelope"></i> ${data.profile.email} &nbsp;|&nbsp; 
-                <i class="fab fa-linkedin"></i> ${data.profile.linkedin} &nbsp;|&nbsp; 
-                <i class="fas fa-phone"></i> ${data.profile.phone}
-            `;
-            document.getElementById('pdf-contact-text').innerHTML = contactHTML;
-
-            // Footer Contact
-            document.getElementById('footer-email').textContent = data.profile.email;
-            document.getElementById('footer-phone').textContent = data.profile.phone;
-            document.getElementById('footer-location').textContent = data.profile.location;
-
-            // About
-            const aboutContainer = document.getElementById('about-content');
-            const readMoreBtn = document.getElementById('read-more-btn');
-            aboutContainer.innerHTML = marked.parse(data.about);
-
-            setTimeout(() => {
-                if (aboutContainer.scrollHeight > aboutContainer.clientHeight) {
-                    readMoreBtn.style.display = 'inline-block';
-                }
-            }, 0);
-
-            readMoreBtn.addEventListener('click', () => {
-                aboutContainer.classList.toggle('line-clamp');
-                readMoreBtn.textContent = aboutContainer.classList.contains('line-clamp') ? 'Read More' : 'Read Less';
-            });
-
-            // Skills
-            const skillsContainer = document.getElementById('skills-list');
-            const sidebarSkills = document.getElementById('sidebar-skills');
-            skillsContainer.innerHTML = '';
-            sidebarSkills.innerHTML = '';
-
-            if (data.skills) {
-                data.skills.forEach(skill => {
-                    // Web
-                    const span = document.createElement('span');
-                    span.innerHTML = `<i class="${skill.icon}"></i> ${skill.name}`;
-                    skillsContainer.appendChild(span);
-                    // Sidebar
-                    const sideSpan = document.createElement('span');
-                    sideSpan.innerHTML = skill.name;
-                    sidebarSkills.appendChild(sideSpan);
-                });
+        // Wait for layout to paint to calculate height
+        setTimeout(() => {
+            if (container.scrollHeight > container.clientHeight) {
+                btn.style.display = 'inline-block';
+                btn.onclick = () => {
+                    container.classList.toggle('line-clamp');
+                    btn.textContent = container.classList.contains('line-clamp') ? 'Read More' : 'Read Less';
+                };
+            } else {
+                btn.style.display = 'none';
             }
+        }, 50);
+    };
 
-            // Experience
-            const expContainer = document.getElementById('experience-list');
-            data.experience.forEach(item => {
-                const description = marked.parse(item.desc);
-                const html = `
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">${item.date}</div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <img src="${item.logo}" alt="Logo" class="company-logo" onerror="this.style.display='none'">
-                                <div>
-                                    <h3>${item.role}</h3>
-                                    <h4>${item.company}</h4>
-                                </div>
-                            </div>
-                            <p class="markdown-content">${description}</p>
-                        </div>
+    // --- 2. DATA POPULATION ---
+    try {
+        const response = await fetch('data.yaml');
+        const text = await response.text();
+        const data = jsyaml.load(text);
+
+        // A. Static Footer Info
+        setText('year', new Date().getFullYear());
+        setText('footer-name', data.profile.name);
+
+        // B. Profile & Sidebar Mapping (Reduces repetitive code)
+        const textMap = {
+            'profile-name': data.profile.name, 'sidebar-name': data.profile.name,
+            'profile-role': data.profile.role, 'sidebar-role': data.profile.role,
+            'sidebar-email': data.profile.email, 'footer-email': data.profile.email,
+            'sidebar-phone': data.profile.phone, 'footer-phone': data.profile.phone,
+            'sidebar-location': data.profile.location, 'footer-location': data.profile.location,
+            'sidebar-linkedin': data.profile.linkedin
+        };
+        Object.entries(textMap).forEach(([id, val]) => setText(id, val));
+
+        setSrc('profile-img', data.profile.image);
+        setSrc('sidebar-img', data.profile.image);
+
+        // C. Specific HTML Blocks
+        const contactHTML = `
+            <i class="fas fa-envelope"></i> ${data.profile.email} &nbsp;|&nbsp; 
+            <i class="fab fa-linkedin"></i> ${data.profile.linkedin} &nbsp;|&nbsp; 
+            <i class="fas fa-phone"></i> ${data.profile.phone}`;
+        setHtml('pdf-contact-text', contactHTML);
+
+        // D. About Section
+        setHtml('about-content', marked.parse(data.about));
+        initReadMore('about-content', 'read-more-btn');
+
+        // E. Lists (Experience, Education, Projects, Certs)
+        // Helper to generate HTML lists efficiently
+        const renderList = (containerId, items, templateFn) => {
+            const container = getEl(containerId);
+            if (container && items?.length) {
+                container.innerHTML = items.map(templateFn).join('');
+            }
+        };
+
+        // Experience
+        renderList('experience-list', data.experience, item => `
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">${item.date}</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <img src="${item.logo}" class="company-logo" onerror="this.style.display='none'">
+                        <div><h3>${item.role}</h3><h4>${item.company}</h4></div>
                     </div>
-                `;
-                expContainer.innerHTML += html;
-            });
+                    <div class="markdown-content">${marked.parse(item.desc)}</div>
+                </div>
+            </div>`);
 
-            // Certifications
-            const certContainer = document.getElementById('cert-list');
-            if (certContainer && data.certifications) {
-                data.certifications.forEach(cert => {
-                    const html = `
-                        <a href="${cert.link}" target="_blank" class="cert-card">
-                            <h3>${cert.title}</h3>
-                            <div class="cert-img-wrapper">
-                                <img src="${cert.image}" alt="${cert.title}" onerror="this.src='https://via.placeholder.com/100?text=Badge'">
-                            </div>
-                            <div class="cert-info">
-                                <p>${cert.issuer}</p>
-                                <span class="verify-btn">Verify <i class="fas fa-external-link-alt"></i></span>
-                            </div>
-                        </a>
-                    `;
-                    certContainer.innerHTML += html;
-                });
-            }
+        // Education
+        renderList('education-list', data.education, item => `
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">${item.date}</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <img src="${item.logo}" class="company-logo" onerror="this.style.display='none'">
+                        <div><h3>${item.degree}</h3><h4>${item.school}</h4></div>
+                    </div>
+                    <div class="markdown-content">${item.desc}</div>
+                </div>
+            </div>`);
 
-            // Projects
-            const projectContainer = document.getElementById('project-list');
-            if (projectContainer && data.projects) {
-                data.projects.forEach(project => {
-                    const descHTML = project.desc ? `<div class="project-desc">${marked.parse(project.desc)}</div>` : '';
-                    const html = `
-                        <div class="project-card">
-                            <h3>${project.title}</h3>
-                            ${descHTML}
-                            <a href="${project.repo}" target="_blank" class="repo-btn">
-                                <i class="fab fa-github"></i> View Repository
-                            </a>
-                        </div>
-                    `;
-                    projectContainer.innerHTML += html;
-                });
-            }
+        // Projects
+        renderList('project-list', data.projects, proj => `
+            <div class="project-card">
+                <h3>${proj.title}</h3>
+                ${proj.desc ? `<div class="project-desc">${marked.parse(proj.desc)}</div>` : ''}
+                <a href="${proj.repo}" target="_blank" class="repo-btn"><i class="fab fa-github"></i> View Repository</a>
+            </div>`);
 
-            // Education
-            const eduContainer = document.getElementById('education-list');
-            if (data.education) {
-                data.education.forEach(item => {
-                    const html = `
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-date">${item.date}</div>
-                            <div class="timeline-content">
-                                <div class="timeline-header">
-                                    <img src="${item.logo}" alt="Logo" class="company-logo" onerror="this.style.display='none'">
-                                    <div>
-                                        <h3>${item.degree}</h3>
-                                        <h4>${item.school}</h4>
-                                    </div>
-                                </div>
-                                <p class="markdown-content">${item.desc}</p>
-                            </div>
-                        </div>
-                    `;
-                    eduContainer.innerHTML += html;
-                });
-            }
+        // Certifications
+        renderList('cert-list', data.certifications, cert => `
+            <a href="${cert.link}" target="_blank" class="cert-card">
+                <h3>${cert.title}</h3>
+                <div class="cert-img-wrapper"><img src="${cert.image}" onerror="this.src='https://via.placeholder.com/100?text=Badge'"></div>
+                <div class="cert-info"><p>${cert.issuer}</p><span class="verify-btn">Verify <i class="fas fa-external-link-alt"></i></span></div>
+            </a>`);
 
-            // Languages
-            const footerLangContainer = document.getElementById('footer-languages');
-            const sidebarLangContainer = document.getElementById('sidebar-languages');
-            if (data.languages) {
-                let langHTML = '';
-                data.languages.forEach(lang => {
-                    langHTML += `
-                        <div class="lang-row">
-                            <i class="fi fi-${lang.countryCode}"></i>
-                            <span>${lang.name} (${lang.level})</span>
-                        </div>`;
-                });
-                if (footerLangContainer) footerLangContainer.innerHTML = langHTML;
-                if (sidebarLangContainer) sidebarLangContainer.innerHTML = langHTML;
-            }
+        // F. Skills (Dual rendering for Web and Sidebar)
+        if (data.skills) {
+            const webSkills = data.skills.map(s => `<span><i class="${s.icon}"></i> ${s.name}</span>`).join('');
+            const sideSkills = data.skills.map(s => `<span>${s.name}</span>`).join('');
+            setHtml('skills-list', webSkills);
+            setHtml('sidebar-skills', sideSkills);
+        }
 
-            // Videos
-            const videoContainer = document.getElementById('video-list');
-            if (data.videos) {
-                data.videos.forEach((video, index) => {
-                    const descId = `video-desc-${index}`;
-                    const btnId = `video-btn-${index}`;
-                    const html = `
-                        <div class="video-wrapper">
-                            <h3>${video.title}</h3>
-                            <div class="video-container web-video">
-                                <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" frameborder="0" allowfullscreen></iframe>
-                            </div>
-                            <div id="${descId}" class="markdown-content line-clamp video-desc">
-                                ${marked.parse(video.desc)}
-                            </div>
-                            <button id="${btnId}" class="read-more-btn">Read More</button>
-                            <div class="pdf-video-link" style="display: none;">
-                                <p><strong>Watch Video:</strong> <a href="https://youtu.be/${video.id}">https://youtu.be/${video.id}</a></p>
-                            </div>
-                        </div>
-                    `;
-                    videoContainer.innerHTML += html;
+        // G. Languages (Dual rendering)
+        if (data.languages) {
+            const langHTML = data.languages.map(l => 
+                `<div class="lang-row"><i class="fi fi-${l.countryCode}"></i> <span>${l.name} (${l.level})</span></div>`
+            ).join('');
+            setHtml('footer-languages', langHTML);
+            setHtml('sidebar-languages', langHTML);
+        }
 
-                    setTimeout(() => {
-                        const descEl = document.getElementById(descId);
-                        const btnEl = document.getElementById(btnId);
-                        if (descEl && descEl.scrollHeight > descEl.clientHeight) {
-                            btnEl.style.display = 'inline-block';
-                        }
-                        if (btnEl) {
-                            btnEl.addEventListener('click', () => {
-                                descEl.classList.toggle('line-clamp');
-                                btnEl.textContent = descEl.classList.contains('line-clamp') ? 'Read More' : 'Read Less';
-                            });
-                        }
-                    }, 0);
-                });
-            }
-        })
-        .catch(err => console.error('Error loading YAML:', err));
+        // H. Update Social Links (Targeting the IDs added in HTML refactor)
+        const updateLink = (id, url) => { const el = getEl(id); if (el && url) el.href = url; };
+        updateLink('link-linkedin', `https://www.${data.profile.linkedin}`);
+        updateLink('link-github', data.projects?.[0]?.repo ? data.projects[0].repo.split('/').slice(0,3).join('/') : '#'); // rough guess or add github to profile yaml
+        updateLink('link-gitlab', 'https://gitlab.com/devops-project23'); 
 
-    // --- 2. LINKING THE PDF FUNCTION 
+        // I. Videos
+        if (data.videos) {
+            const videoHTML = data.videos.map((video, idx) => `
+                <div class="video-wrapper">
+                    <h3>${video.title}</h3>
+                    <div class="video-container web-video">
+                        <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div id="video-desc-${idx}" class="markdown-content line-clamp video-desc">${marked.parse(video.desc)}</div>
+                    <button id="video-btn-${idx}" class="read-more-btn">Read More</button>
+                    <div class="pdf-video-link" style="display: none;">
+                        <p><strong>Watch Video:</strong> <a href="https://youtu.be/${video.id}">https://youtu.be/${video.id}</a></p>
+                    </div>
+                </div>
+            `).join('');
+            
+            setHtml('video-list', videoHTML);
+            
+            // Initialize read more buttons for videos after injection
+            data.videos.forEach((_, idx) => initReadMore(`video-desc-${idx}`, `video-btn-${idx}`));
+        }
 
-    // --- LINK THE PDF FUNCTION ---
-    const downloadBtn = document.getElementById('downloadBtn');
+    } catch (err) {
+        console.error('Error loading YAML data:', err);
+        setText('profile-name', 'Error loading data');
+    }
+
+    // --- 3. EVENT LISTENERS ---
+    
+    // PDF Download
+    const downloadBtn = getEl('downloadBtn');
     if (downloadBtn) {
-        // We use an arrow function to call the function from the other file
         downloadBtn.addEventListener('click', () => {
-             // Check if generate_pdf.js is loaded
-             if (typeof downloadPDF === "function") {
-                 downloadPDF();
-             } else {
-                 alert("PDF Generator is still loading, please wait...");
-             }
+            typeof downloadPDF === "function" 
+                ? downloadPDF() 
+                : alert("PDF Generator is still loading, please wait...");
         });
     }
-});
 
-// --- 3. NAVIGATION ---
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId === '#home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            const target = document.querySelector(targetId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+    // Smooth Navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                document.querySelector(targetId)?.scrollIntoView({ behavior: 'smooth' });
             }
-        }
+        });
     });
 });
