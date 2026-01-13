@@ -1,26 +1,22 @@
-/* --- RESET & VARIABLES --- */
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
 :root {
     --primary: #2563eb;       
     --secondary: #1e293b;     
     --light: #f8fafc;        
     --white: #ffffff;
     --text-main: #334155;
+    --text-light: #64748b;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 10px 15px rgba(0,0,0,0.1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
     scroll-behavior: smooth;
-    /* This ensures standard HTML links respect the sticky header height */
-    scroll-padding-top: 30px; 
-}
-
-/* Specific fix for the sections to ensure they snap correctly */
-section, #home {
-    margin-top: 0;
-    margin-bottom: 0;
-    scroll-margin-top: 30px;
+    scroll-padding-top: 80px; /* Offset for sticky header */
 }
 
 body {
@@ -30,11 +26,14 @@ body {
     line-height: 1.6;
 }
 
-/* --- LOADING OVERLAY --- */
+/* =========================================
+   2. UTILITIES
+   ========================================= */
+/* Loading Overlay */
 .loading-overlay {
     display: none;
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255, 255, 255, 0.9); z-index: 9999;
+    background: rgba(255, 255, 255, 0.95); z-index: 9999;
     flex-direction: column; justify-content: center; align-items: center;
 }
 .spinner {
@@ -44,58 +43,53 @@ body {
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* --- NAVBAR --- */
+/* Text Utilities */
+.multi-line-text { white-space: pre-wrap; }
+
+.markdown-content { line-height: 1.8; color: var(--text-main); }
+.markdown-content p { margin-bottom: 15px; }
+.markdown-content ul { margin-left: 20px; margin-bottom: 15px; }
+.markdown-content strong { color: var(--primary); font-weight: 600; }
+
+/* Read More / Line Clamp */
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.read-more-btn {
+    background: none; border: none; color: var(--primary);
+    font-weight: 600; cursor: pointer; margin-top: 10px; 
+    font-size: 0.9rem; display: none;
+}
+.read-more-btn:hover { text-decoration: underline; }
+
+/* =========================================
+   3. LAYOUT (Navbar, Hero, Footer)
+   ========================================= */
+/* Navbar */
 .navbar {
-    background: #0f172a;
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
-    transition: background 0.3s;
+    background: #0f172a; position: sticky; top: 0; left: 0; width: 100%; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 50px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* --- NAV LINKS --- */
-.nav-links li a {
-    text-decoration: none;
-    color: #cbd5e1; /* Light Grey (easier on eyes than pure white) */
-    font-weight: 500;
-    font-size: 1rem;
-    transition: color 0.3s;
-}
-
-/* Hover Effect */
-.nav-links li a:hover {
-    color: var(--primary); /* Keeps your primary blue/cyan hover color */
-}
-
-/* --- MOBILE MENU ICON (If you have one) --- */
-.menu-icon i {
-    color: #ffffff; /* Ensure hamburger menu is visible */
-}
-
-/* UPDATED LOGO STYLES */
-.logo {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--primary);
-    text-decoration: none; /* Removes underline from link */
-    cursor: pointer;
-}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-img { height: 45px; width: auto; filter: drop-shadow(0 0 2px var(--primary)); }
+.logo-text { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
 
 .nav-links { list-style: none; display: flex; gap: 20px; }
-.nav-links a { text-decoration: none; color: var(--secondary); font-weight: 500; }
+.nav-links a { text-decoration: none; color: #cbd5e1; font-weight: 500; transition: color 0.3s; }
+.nav-links a:hover { color: var(--primary); }
+
 .btn-primary {
     background: var(--primary); color: white; border: none;
     padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 8px;
 }
 
-/* --- HERO --- */
+/* Hero */
 .hero {
     text-align: center; padding: 80px 20px;
     background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
@@ -106,492 +100,150 @@ body {
 }
 .pdf-contact-info { display: none; margin-top: 10px; font-size: 0.9rem; color: #555; }
 
-/* --- SECTIONS --- */
-.section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }
+/* Sections Global */
+.section { padding: 40px 20px; max-width: 800px; margin: 0 auto; scroll-margin-top: 80px; }
 h2 { text-align: center; margin-bottom: 30px; color: var(--secondary); }
 h2::after { content: ''; display: block; width: 50px; height: 3px; background: var(--primary); margin: 10px auto 0; }
 
-/* --- SKILLS --- */
-.skills-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+/* Footer */
+footer { background: var(--secondary); color: white; padding: 40px 20px 20px; margin-top: 50px; }
+.footer-container { display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto 30px auto; }
+.footer-col p { margin-bottom: 10px; display: flex; align-items: center; color: #cbd5e1; }
+.footer-col p i { width: 25px; color: var(--primary); margin-right: 5px; }
+.social-icons a { color: white; margin-right: 15px; font-size: 1.2rem; }
+.footer-bottom { border-top: 1px solid #334155; padding-top: 20px; text-align: center; color: var(--text-light); font-size: 0.85rem; }
+
+/* =========================================
+   4. MODULES
+   ========================================= */
+/* Timeline (Experience/Education) */
+.timeline-container { border-left: 3px solid var(--primary); margin-left: 20px; padding-left: 30px; }
+.timeline-item { position: relative; margin-bottom: 30px; }
+.timeline-dot {
+    position: absolute; left: -38px; top: 5px; width: 13px; height: 13px;
+    background: var(--white); border: 3px solid var(--primary); border-radius: 50%;
+}
+.timeline-header { display: flex; align-items: center; margin-bottom: 10px; }
+.company-logo { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; margin-right: 15px; background: #fff; border: 1px solid #eee; }
+.timeline-content { background: var(--white); padding: 15px; border-radius: 8px; box-shadow: var(--shadow); }
+.timeline-content h3 { margin-bottom: 2px; font-size: 1.1rem; }
+.timeline-content h4 { margin-bottom: 0; font-size: 0.95rem; color: var(--text-light); }
+
+/* Skills */
+.skill-tags { text-align: center; }
 .skill-tags span {
     background: var(--white); padding: 5px 12px; border-radius: 15px;
     font-size: 0.85rem; border: 1px solid #e2e8f0; display: inline-block; margin: 3px;
 }
+.skill-tags span i { margin-right: 8px; color: var(--primary); }
 
-/* --- TIMELINE --- */
-.timeline-container { border-left: 3px solid var(--primary); margin-left: 20px; padding-left: 30px; }
-.timeline-item { position: relative; margin-bottom: 30px; }
-.timeline-dot {
-    position: absolute; left: -38px; top: 5px; width: 13px; height: 13px; background: var(--white);
-    border: 3px solid var(--primary); border-radius: 50%;
+/* Common Card Styles (Projects & Certs) */
+.cert-card, .project-card {
+    background: var(--white); border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column; height: 100%;
 }
-.timeline-content { background: var(--white); padding: 15px; border-radius: 8px; box-shadow: var(--shadow); }
-
-/* --- BADGES --- */
-.badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-.badge-card {
-    display: flex; align-items: center; background: var(--white);
-    padding: 15px; border-radius: 8px; box-shadow: var(--shadow);
-    text-decoration: none; color: var(--text-main); border: 1px solid transparent;
+.cert-card:hover, .project-card:hover {
+    transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--primary);
 }
-.badge-icon img { width: 40px; height: 40px; object-fit: contain; margin-right: 15px; }
-.badge-info h3 { font-size: 1rem; margin-bottom: 2px; }
-.badge-info p { font-size: 0.85rem; color: #64748b; }
-.verify-link { font-size: 0.75rem; color: var(--primary); font-weight: 600; }
 
-/* --- VIDEO --- */
+/* Certifications Specifics */
+.cert-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;
+}
+@media screen and (min-width: 900px) { .cert-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.cert-card { padding: 25px 20px; align-items: center; text-align: center; text-decoration: none; }
+.cert-card h3 { 
+    font-size: 1.1rem; color: var(--secondary); margin-bottom: 15px; 
+    font-weight: 600; min-height: 50px; display: flex; align-items: center; justify-content: center;
+}
+.cert-img-wrapper { width: 100px; height: 100px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+.cert-img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+.cert-info p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 10px; }
+.verify-btn { font-size: 0.85rem; color: var(--primary); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+
+/* Projects Specifics */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.project-card { padding: 25px; justify-content: space-between; }
+.project-card h3 { color: var(--secondary); font-size: 1.2rem; margin-bottom: 10px; }
+.project-desc { color: #555; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+.repo-btn {
+    align-self: flex-start; padding: 10px 15px; background-color: #f1f5f9;
+    color: var(--text-main); text-decoration: none; border-radius: 6px; font-weight: 600;
+    transition: background 0.2s, color 0.2s; display: inline-flex; align-items: center; gap: 5px;
+}
+.repo-btn:hover { background-color: var(--primary); color: #fff; }
+
+/* Video */
 .video-container {
     position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
     border-radius: 8px; box-shadow: var(--shadow); margin-top: 15px;
 }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-.pdf-video-link { 
-    margin-top: 10px; padding: 10px; border: 1px solid #ddd; 
-    border-radius: 5px; background: #fff; text-align: center;
-}
+.video-desc { margin-top: 15px; font-size: 0.95rem; color: #555; }
+.pdf-video-link { display: none; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fff; text-align: center; }
 
-/* --- FOOTER --- */
-footer { background: var(--secondary); color: white; padding: 40px 20px 20px; margin-top: 50px; }
-.footer-container { display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto 30px auto; }
+/* Languages List */
+.languages-list { display: flex; flex-direction: column; gap: 8px; }
+.lang-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #ccc; }
+.lang-row i { font-size: 1.1em; border-radius: 2px; }
 
-/* FOOTER CONTACT ICONS STYLING */
-.footer-col p { 
-    margin-bottom: 10px; 
-    display: flex; 
-    align-items: center; 
-}
-.footer-col p i {
-    width: 25px; /* Ensures icons align neatly */
-    color: var(--primary);
-    margin-right: 5px;
-}
-
-.social-icons a { color: white; margin-right: 15px; font-size: 1.2rem; }
-.footer-bottom {
-    border-top: 1px solid #334155; padding-top: 20px;
-    display: flex; justify-content: center; width: 100%; text-align: center;
-}
-.footer-bottom p { font-size: 0.85rem; color: var(--text-light); }
-
-/* --- MOBILE --- */
+/* =========================================
+   5. RESPONSIVE (Web Mobile)
+   ========================================= */
 @media (max-width: 600px) {
     .nav-links { display: none; }
+    .navbar { padding: 15px 20px; }
     .footer-container { flex-direction: column; text-align: center; gap: 20px; }
-    .footer-col p { justify-content: center; } /* Centers contact info on mobile */
-}
-
-/* --- PDF GENERATION STYLES --- */
-.generating-pdf .web-video { display: none !important; }
-.generating-pdf .pdf-video-link { display: block !important; }
-.generating-pdf .pdf-contact-info { display: block !important; }
-.generating-pdf .section { box-shadow: none; border: 1px solid #eee; margin-bottom: 10px; }
-
-/* Add/Update these specific classes in your style.css */
-
-/* PRESERVE NEWLINES FROM YAML */
-.multi-line-text {
-    white-space: pre-wrap; /* Crucial for multi-line YAML strings */
-}
-
-/* ADD THESE NEW RULES: */
-.markdown-content {
-    line-height: 1.8;
-    color: var(--text-main);
-}
-
-.markdown-content p {
-    margin-bottom: 15px; /* Nice spacing between paragraphs */
-}
-
-.markdown-content ul {
-    margin-left: 20px;
-    margin-bottom: 15px;
-}
-
-.markdown-content li {
-    margin-bottom: 5px;
-}
-
-/* --- LINE CLAMP LOGIC --- */
-.line-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 5; /* Show exactly 5 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    /* transition: max-height 0.5s ease; Optional: for smooth animations requires max-height tricks */
-}
-
-/* Button Styling */
-.read-more-btn {
-    background: none;
-    border: none;
-    color: var(--primary);
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    padding: 0;
-    font-size: 0.9rem;
-    display: none; /* Hidden initially, JS will show it if text is long */
-}
-
-.read-more-btn:hover {
-    text-decoration: underline;
-}
-
-/* Make bold text stand out */
-.markdown-content strong {
-    color: var(--primary);
-    font-weight: 600;
-}
-
-/* SKILL ICONS */
-.skill-tags span i {
-    margin-right: 8px;
-    color: var(--primary);
-}
-
-/* JOB HEADER (Logo + Title) */
-.timeline-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.company-logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    border-radius: 4px;
-    margin-right: 15px;
-    background: #fff; /* Ensure transparent logos look okay */
-    border: 1px solid #eee;
-}
-
-/* Adjust timeline content to accommodate logo */
-.timeline-content h3 { margin-bottom: 2px; }
-.timeline-content h4 { margin-bottom: 0; }
-
-/* Styling for video descriptions */
-.video-desc {
-  margin-top: 15px;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-/* --- PDF GENERATION TWEAKS --- */
-/* When generating PDF, force all text to show and hide buttons */
-.generating-pdf .line-clamp {
-  -webkit-line-clamp: unset !important; /* Remove the limit */
-  display: block !important;
-  overflow: visible !important;
-}
-
-.generating-pdf .read-more-btn {
-  display: none !important; /* Hide the button in PDF */
-}
-
-/* --- UPDATED LOGO STYLES --- */
-
-/* 1. The main container link */
-.logo {
-  text-decoration: none;
-  cursor: pointer;
-  /* Use flexbox to align text and image horizontally and vertically */
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Space between text and image */
-}
-
-/* 2. The text part */
-.logo-text {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--primary);
-}
-
-/* 3. The image part */
-.logo-img {
-  height: 45px; /* Adjust height to match the text size nicely */
-  width: auto;  /* Maintains aspect ratio */
-  /* Optional: adds a subtle glow effect to match the image style */
-  filter: drop-shadow(0 0 2px var(--primary)); 
-}
-
-/* --- CERTIFICATIONS SECTION --- */
-/* --- CERTIFICATIONS SECTION --- */
-.cert-grid {
-  display: grid;
-  /* Keeps it 3 per line on desktops */
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-/* Force 3 columns on standard laptops/desktops */
-@media screen and (min-width: 900px) {
-  .cert-grid {
-      grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.cert-card {
-  display: flex;
-  flex-direction: column; /* Stack vertically: Title -> Image -> Info */
-  align-items: center;    /* Center everything horizontally */
-  text-align: center;     /* Center text */
-  background: var(--white);
-  padding: 25px 20px;     /* More padding for a cleaner look */
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  border: 1px solid #e2e8f0;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-  height: 100%; /* Ensures cards are same height */
-}
-
-.cert-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-  border-color: var(--primary);
-}
-
-/* Title Styling */
-.cert-card h3 {
-  font-size: 1.1rem;
-  color: var(--secondary);
-  margin-bottom: 15px; /* Space between title and image */
-  font-weight: 600;
-  min-height: 50px;    /* Aligns images if titles have different lengths */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Image Styling - Made Bigger */
-.cert-img-wrapper {
-  width: 100px;  /* Increased from 60px */
-  height: 100px; /* Increased from 60px */
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cert-img-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-/* Info Styling */
-.cert-info p {
-  font-size: 0.9rem;
-  color: #64748b;
-  margin-bottom: 10px;
-}
-
-.verify-btn {
-  font-size: 0.85rem;
-  color: var(--primary);
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-/* PROJECTS */
-.project-card {
-    background: var(--white);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border: 1px solid #e2e8f0;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Pushes button to bottom if desc is short */
-    height: 100%;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-    border-color: var(--primary);
-}
-
-.project-card h3 {
-    color: var(--secondary);
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.project-desc {
-    color: #555;
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-    flex-grow: 1; /* Allows this text to expand and align buttons */
-}
-
-/* Repository Button */
-.repo-btn {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #f1f5f9;
-    color: var(--text-main);
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    text-align: center;
-    transition: background 0.2s, color 0.2s;
-    align-self: flex-start; /* Aligns button to left */
-}
-
-.repo-btn:hover {
-    background-color: var(--primary);
-    color: #fff;
-}
-
-.repo-btn i {
-    margin-right: 5px;
-}
-
-/* Container for the list */
-.languages-list {
-    display: flex;
-    flex-direction: column; /* This forces them one under another */
-    gap: 8px; /* Space between rows */
-}
-
-/* Individual Language Row */
-.lang-row {
-    display: flex;
-    align-items: center; /* Vertically aligns flag and text */
-    gap: 10px; /* Space between flag and text */
-    font-size: 0.9rem;
-    color: #ccc; /* Match your footer text color */
-}
-
-/* Flag Icon Tweaks */
-.lang-row i {
-    font-size: 1.1em; /* Make flag slightly larger */
-    border-radius: 2px; /* Optional: Slight rounded corners on flags */
+    .footer-col p { justify-content: center; }
 }
 
 /* =========================================
-   PDF GENERATION STYLES (CV Sidebar Layout)
+   6. PDF GENERATION STYLES
    ========================================= */
+/* The class .generating-pdf is added to body by JS when downloading */
 
-/* 1. Layout Structure: Sidebar + Main Content */
 .generating-pdf .pdf-layout-wrapper {
     display: grid;
-    grid-template-columns: 280px 1fr; /* Left Col 280px, Right Col fills rest */
-    min-height: 100vh;
-    align-items: stretch;
+    grid-template-columns: 280px 1fr; /* Sidebar | Main */
+    min-height: 100vh; align-items: stretch;
 }
 
-/* 2. Show the Sidebar */
+/* Sidebar Styling */
 .generating-pdf .pdf-sidebar {
     display: block !important;
-    background-color: #1e293b; /* Dark Sidebar */
-    color: white;
-    padding: 30px 20px;
-    height: 100%;
-    text-align: left;
-    -webkit-print-color-adjust: exact;
+    background-color: #1e293b; color: white; padding: 30px 20px;
+    height: 100%; text-align: left; -webkit-print-color-adjust: exact;
 }
+.sidebar-profile { text-align: center; margin-bottom: 30px; }
+.sidebar-profile img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 10px; }
+.sidebar-profile h2 { color: white; font-size: 1.4rem; margin-bottom: 5px; }
+.sidebar-profile p { color: #94a3b8; font-size: 0.9rem; }
+.sidebar-section { margin-bottom: 25px; }
+.sidebar-section h3 { color: var(--primary); border-bottom: 1px solid #475569; padding-bottom: 5px; margin-bottom: 10px; font-size: 1.1rem; }
+.contact-list p { color: #cbd5e1; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+.sidebar-tags span { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; margin: 2px; font-size: 0.8rem; border-radius: 4px; }
 
-/* 3. Hide Web-Only Elements */
+/* Main Content Adjustments for PDF */
+.generating-pdf .pdf-main-content { padding: 30px; background: white; }
+.generating-pdf .section { padding: 0; margin-bottom: 30px; box-shadow: none; border: none; max-width: 100%; }
+.generating-pdf h2 { text-align: left; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px; }
+.generating-pdf h2::after { display: none; }
+
+/* Hide Web Elements */
 .generating-pdf .web-only,
 .generating-pdf .navbar,
 .generating-pdf footer,
-.generating-pdf #read-more-btn {
-    display: none !important;
-}
+.generating-pdf .read-more-btn,
+.generating-pdf .web-video { display: none !important; }
 
-/* 4. Sidebar Internal Styling */
-.sidebar-profile {
-    text-align: center;
-    margin-bottom: 30px;
-}
-.sidebar-profile img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid var(--primary);
-    object-fit: cover;
-    margin-bottom: 10px;
-}
-.sidebar-profile h2 {
-    color: white;
-    font-size: 1.4rem;
-    margin-bottom: 5px;
-    text-align: center;
-}
-.sidebar-profile p {
-    color: #94a3b8;
-    text-align: center;
-    font-size: 0.9rem;
-}
+/* Show PDF Elements */
+.generating-pdf .pdf-video-link,
+.generating-pdf .pdf-contact-info { display: block !important; }
 
-.sidebar-section { margin-bottom: 25px; }
-.sidebar-section h3 {
-    color: var(--primary);
-    border-bottom: 1px solid #475569;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    text-align: left;
-}
-
-/* Sidebar Contacts */
-.contact-list p {
-    color: #cbd5e1;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-}
-
-/* Sidebar Tags (Skills) */
-.sidebar-tags span {
-    display: inline-block;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: white;
-    padding: 4px 8px;
-    margin: 2px;
-    font-size: 0.8rem;
-    border-radius: 4px;
-}
-
-/* 5. Main Content Adjustments for PDF */
-.generating-pdf .pdf-main-content {
-    padding: 30px;
-    background: white;
-}
-.generating-pdf .section {
-    padding: 0;
-    margin-bottom: 30px;
-    box-shadow: none;
-    border: none;
-    max-width: 100%;
-}
-.generating-pdf h2 {
-    text-align: left;
-    border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 5px;
-    margin-bottom: 15px;
-}
-.generating-pdf h2::after { display: none; } /* Remove center dash */
-
-/* Force Grids to be 2 columns in PDF for Projects/Certs */
+/* Override Layouts for Print */
 .generating-pdf .project-grid, 
-.generating-pdf .cert-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-}
-
-/* Ensure language text in sidebar is readable */
-.generating-pdf .lang-row {
-    color: #cbd5e1;
-}
+.generating-pdf .cert-grid { grid-template-columns: repeat(2, 1fr) !important; }
+.generating-pdf .line-clamp { -webkit-line-clamp: unset !important; display: block !important; overflow: visible !important; }
