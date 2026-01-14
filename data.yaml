@@ -79,8 +79,6 @@ experience:
       Besides those, I was learning the basics of Linux and how to connect to MariaDB using C++ connectors. At the end of the practice, 
       I developed a project that used all the learned technologies.
 
-
-
 skills:
   - name: "AWS"
     icon: "devicon-amazonwebservices-plain colored"
@@ -104,8 +102,8 @@ skills:
     icon: "devicon-bash-plain"
   - name: "Git"
     icon: "devicon-git-plain colored"
-  - name: "Prometheus"
-    icon: "devicon-prometheus-original colored"
+  # - name: "Prometheus"
+  #   icon: "devicon-prometheus-original colored"
   - name: "Helm"
     icon: "devicon-helm-original colored"
   - name: "Kustomize"
