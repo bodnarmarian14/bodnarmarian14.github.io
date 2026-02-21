@@ -1,0 +1,175 @@
+# Edit this file to update website content without touching index.html.
+# Most fields are optional. If a field is missing, inline HTML fallback is used.
+
+head:
+  title: "Marian Bodnar — Developer & Engineer"
+  description: "Personal portfolio of Marian Bodnar — Developer, Engineer, and lifelong learner."
+  og_title: "Marian Bodnar — Portfolio"
+  og_description: "Personal portfolio showcasing projects, certifications, and experience."
+  og_type: "website"
+  canonical_url: "https://yourusername.github.io/"
+  icons:
+    svg: "assets/website/favicon.svg"
+    png_64: "assets/website/favicon-profile-64.png"
+    apple_touch: "assets/website/apple-touch-icon.png"
+    fallback_svg: "assets/website/favicon.svg"
+
+site:
+  nav_logo: "<YourName />"
+
+contact:
+  email: "you@email.com"
+
+hero:
+  availability: "Open to opportunities"
+  greeting: "Hi, I'm"
+  name: "Marian Bodnar"
+  subtitle: "Cloud Engineer · DevOps · Full-Stack Developer"
+  description: "Passionate about building scalable infrastructure, automating everything, and shipping software that makes a difference. Based in 📍 Your City, Your Country."
+  avatar_image: "" # optional static fallback; rotating hero images are configured in images.yaml
+  avatar_alt: "Marian Bodnar profile photo"
+  cta:
+    - label: "View Projects ↓"
+      href: "#projects"
+    - label: "Contact Me"
+      href: "mailto:you@email.com"
+  stats:
+    - value: "5+"
+      label: "Years Exp."
+    - value: "20+"
+      label: "Projects"
+    - value: "15+"
+      label: "Certs"
+
+about:
+  paragraphs:
+    - "I'm a passionate engineer with a love for cloud infrastructure, automation, and building elegant solutions to complex problems. I thrive at the intersection of development and operations."
+    - "When I'm not architecting systems, I'm constantly learning — earning certifications, contributing to open source, and creating content to share knowledge with the community."
+    - "My journey started with a curiosity about how things work under the hood, and that curiosity has never stopped driving me forward."
+  highlights:
+    - icon: "📍"
+      label: "Location"
+      value: "Your City, Country"
+    - icon: "💼"
+      label: "Current Role"
+      value: "Senior Cloud Engineer"
+    - icon: "🎯"
+      label: "Focus"
+      value: "Cloud · DevOps · Security"
+    - icon: "📧"
+      label: "Email"
+      value: "you@email.com"
+      type: "email"
+    - icon: "🌐"
+      label: "Languages"
+      value: "English · Spanish"
+
+experience:
+  items:
+    - role: "Senior Cloud Engineer"
+      period: "2022 – Present"
+      company: "Qodea"
+      logo: "assets/companies/qodea.jpeg"
+      employment_type: "Full-time"
+      description: "Led cloud infrastructure modernization across 3 AWS regions. Reduced deployment time by 70% via CI/CD pipelines. Managed Kubernetes clusters serving 1M+ daily users."
+    - role: "DevOps Engineer"
+      period: "2020 – 2022"
+      company: "Nagarro"
+      logo: "assets/companies/nagarro.png"
+      employment_type: "Full-time"
+      description: "Built and maintained CI/CD pipelines with Jenkins and GitHub Actions. Implemented Infrastructure as Code using Terraform. Achieved 99.99% uptime SLA."
+    - role: "Full-Stack Developer"
+      period: "2018 – 2020"
+      company: "Endava"
+      logo: "assets/companies/endava.png"
+      employment_type: "Full-time"
+      description: "Developed RESTful APIs and React front-ends for enterprise clients. Introduced automated testing, improving code quality and reducing bugs by 45%."
+
+skills:
+  categories:
+    - title: "☁️ Cloud Platforms"
+      tags: ["AWS", "Azure", "GCP", "Cloudflare"]
+    - title: "⚙️ DevOps & CI/CD"
+      tags: ["Terraform", "Ansible", "GitHub Actions", "Jenkins", "ArgoCD"]
+    - title: "🐳 Containers"
+      tags: ["Docker", "Kubernetes", "Helm", "Podman"]
+    - title: "💻 Languages"
+      tags: ["Python", "Bash", "JavaScript", "TypeScript", "Go"]
+    - title: "🗃️ Databases"
+      tags: ["PostgreSQL", "MySQL", "MongoDB", "Redis"]
+    - title: "🔒 Security"
+      tags: ["IAM", "Vault", "SIEM", "Zero Trust", "SOC 2"]
+
+certifications:
+  items:
+    - name: "AWS Solutions Architect – Associate"
+      issuer: "Amazon Web Services"
+      date: "✓ Issued Jan 2024"
+      verify_url: "https://www.credly.com/badges/YOUR-BADGE-ID"
+      badge_emoji: "🏅"
+    - name: "Certified Kubernetes Administrator (CKA)"
+      issuer: "The Linux Foundation"
+      date: "✓ Issued Mar 2023"
+      verify_url: "https://www.credly.com/badges/YOUR-BADGE-ID"
+      badge_emoji: "🏅"
+    - name: "Datadog Fundamentals"
+      issuer: "Datadog"
+      date: "✓ Issued Jan 2026"
+      verify_url: "https://www.credly.com/badges/328c4555-7ad0-4cf0-94c5-221770cd4a3e/public_url"
+      badge_image: "https://images.credly.com/size/340x340/images/77d92dec-5c60-447b-8326-c592812f2483/blob"
+      #badge_image: "https://images.credly.com/size/340x340/images/YOUR-CREDLY-IMAGE-ID/aws-certified-developer-associate.png"
+
+projects:
+  items:
+    - icon: "🚀"
+      name: "Cloud Infrastructure Automation"
+      description: "Full Terraform + Ansible automation suite for provisioning multi-region AWS environments. Reduced infrastructure provisioning time from 3 days to 20 minutes."
+      github_url: "https://github.com/yourusername/project"
+      demo_url: "https://your-project.com"
+      tags: ["Terraform", "AWS", "Ansible", "Python"]
+    - icon: "🐳"
+      name: "Kubernetes GitOps Platform"
+      description: "Production-grade Kubernetes platform with ArgoCD, Istio service mesh, automated certificate management, and full observability stack."
+      github_url: "https://github.com/yourusername/project2"
+      demo_url: "#"
+      tags: ["Kubernetes", "ArgoCD", "Helm", "Prometheus"]
+
+education:
+  items:
+    - icon: "🎓"
+      degree: "B.Sc. Computer Science"
+      school: "University Name"
+      period: "2014 – 2018 · Your City"
+      description: "Focused on distributed systems, algorithms, and software engineering. Graduated with honors."
+    - icon: "📚"
+      degree: "M.Sc. Cloud Computing"
+      school: "Another University"
+      period: "2019 – 2021 · Online"
+      description: "Specialized in cloud architecture, security, and distributed computing systems."
+
+videos:
+  items:
+    - youtube_id: "VIDEO_ID_1"
+      title: "Terraform Best Practices 2024"
+      views: "12K views"
+      date: "Jan 2024"
+    - youtube_id: "VIDEO_ID_2"
+      title: "Kubernetes Zero to Hero — Full Tutorial"
+      views: "28K views"
+      date: "Mar 2023"
+    - youtube_id: "VIDEO_ID_3"
+      title: "Building a Zero Trust Architecture"
+      views: "8.5K views"
+      date: "Sep 2023"
+
+social:
+  github: "https://github.com/bodnarmarian14"
+  linkedin: "https://linkedin.com/in/yourusername"
+  twitter: "https://twitter.com/yourusername"
+  credly: "https://credly.com/users/yourusername"
+  youtube: "https://youtube.com/@yourusername"
+
+footer:
+  hosted_link_url: "https://pages.github.com/"
+  rights_owner: "Marian Bodnar"
+  rights_text: "All rights reserved"

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio and CV of Marian Bodnar - Platform & DevOps Engineer">
+    <title>Marian Bodnar | Platform & DevOps Engineer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/logo/website-logo.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Generating PDF...</p>
+    </div>
+
+    <nav class="navbar">
+        <a href="#home" class="logo">
+            <img src="images/logo/website-logo.png" alt="Marian Bodnar Logo" class="logo-img">
+            <span class="logo-text"></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certs">Certs</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#videos">Videos</a></li>
+        </ul>
+        <button id="downloadBtn" class="btn-primary" aria-label="Download CV as PDF">
+            <i class="fas fa-file-download"></i> Download PDF
+        </button>
+    </nav>
+
+    <main id="content-to-print">
+        <div class="pdf-layout-wrapper">
+            
+            <aside class="pdf-sidebar" style="display: none;">
+                <div class="sidebar-profile">
+                    <img src="" id="sidebar-img" alt="Profile">
+                    <h2 id="sidebar-name"></h2>
+                    <p id="sidebar-role"></p>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Contact</h3>
+                    <div class="contact-list">
+                        <p><i class="fas fa-envelope"></i> <span id="sidebar-email"></span></p>
+                        <p><i class="fas fa-phone"></i> <span id="sidebar-phone"></span></p>
+                        <p><i class="fas fa-map-marker-alt"></i> <span id="sidebar-location"></span></p>
+                        <p><i class="fab fa-linkedin"></i> <span id="sidebar-linkedin"></span></p>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Languages</h3>
+                    <div id="sidebar-languages" class="languages-list"></div>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Skills</h3>
+                    <div id="sidebar-skills" class="skill-tags sidebar-tags"></div>
+                </div>
+            </aside>
+
+            <div class="pdf-main-content">
+                
+                <section id="home" class="hero web-only">
+                    <div class="hero-content">
+                        <img src="" alt="Profile Photo" class="profile-img" id="profile-img">
+                        <h1 id="profile-name">Loading...</h1>
+                        <p id="profile-role">Loading...</p>
+                        <div class="pdf-contact-info">
+                            <p id="pdf-contact-text"></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="about" class="section">
+                    <h2>About Me</h2>
+                    <div id="about-content" class="markdown-content line-clamp">Loading...</div>
+                    <button id="read-more-btn" class="read-more-btn web-only">Read More</button>
+                </section>
+
+                <section id="experience" class="section">
+                    <h2>Experience</h2>
+                    <div class="timeline-container markdown-content" id="experience-list"></div>
+                </section>
+
+                <section id="skills" class="section web-only">
+                    <h2>Technical Skills</h2>
+                    <div class="skills-container-single">
+                        <div class="skill-tags centered-tags" id="skills-list"></div>
+                    </div>
+                </section>
+
+                <section id="certs" class="section">
+                    <h2>Certifications</h2>
+                    <div class="cert-grid" id="cert-list"></div>
+                </section>
+
+                <section id="projects" class="section">
+                    <h2>Projects</h2>
+                    <div class="project-grid" id="project-list"></div>
+                </section>
+
+                <section id="education" class="section">
+                    <h2>Education</h2>
+                    <div class="timeline-container" id="education-list"></div>
+                </section>
+
+                <section id="videos" class="section">
+                    <h2>Video Demos</h2>
+                    <div id="video-list"></div>
+                </section>
+
+            </div> 
+        </div> 
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <p><i class="fas fa-envelope"></i> <span id="footer-email"></span></p>
+                <p><i class="fas fa-phone"></i> <span id="footer-phone"></span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="footer-location"></span></p>
+            </div>
+            <div class="footer-col">
+                <h3>Languages</h3>
+                <div id="footer-languages" class="languages-list"></div>
+            </div>
+            <div class="footer-col">
+                <h3>Socials</h3>
+                <div class="social-icons">
+                    <a href="#" id="link-linkedin" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" id="link-github" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" id="link-gitlab" target="_blank" aria-label="GitLab"><i class="fab fa-gitlab"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; <span id="year"></span> <span id="footer-name"></span>. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    
+    <script src="generate_pdf.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

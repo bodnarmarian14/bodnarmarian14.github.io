@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Futuristic DevOps monitor favicon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050816" />
+      <stop offset="100%" stop-color="#111b34" />
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1b37" />
+      <stop offset="100%" stop-color="#071226" />
+    </linearGradient>
+    <linearGradient id="monitor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dbe7ff" />
+      <stop offset="100%" stop-color="#91a4c7" />
+    </linearGradient>
+    <linearGradient id="loop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#a78bfa" />
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#bg)" />
+  <path d="M10 14H54M10 22H54M10 30H54M10 38H54M10 46H54" stroke="#193056" stroke-opacity="0.35" />
+  <path d="M14 10V54M22 10V54M30 10V54M38 10V54M46 10V54" stroke="#193056" stroke-opacity="0.25" />
+
+  <!-- Monitor body -->
+  <rect x="11" y="14" width="42" height="28" rx="5.5" fill="#0a1428" stroke="url(#monitor)" stroke-width="1.5" />
+  <rect x="14" y="17" width="36" height="22" rx="3.5" fill="url(#screen)" />
+
+  <!-- Clear infinity symbol on display -->
+  <path d="M18 28C18 22 26 22 32 28C38 34 46 34 46 28C46 22 38 22 32 28C26 34 18 34 18 28"
+    fill="none" stroke="#22d3ee" stroke-opacity="0.25" stroke-width="6.2" stroke-linecap="round"
+    stroke-linejoin="round" />
+  <path d="M18 28C18 22 26 22 32 28C38 34 46 34 46 28C46 22 38 22 32 28C26 34 18 34 18 28"
+    fill="none" stroke="url(#loop)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Monitor stand -->
+  <rect x="29" y="42.5" width="6" height="5.5" rx="2" fill="url(#monitor)" />
+  <rect x="22" y="49" width="20" height="4" rx="2" fill="#9eb1d1" />
+
+  <!-- HUD corner accents -->
+  <path d="M15 20V18H17M49 20V18H47M15 36V38H17M49 36V38H47"
+    fill="none" stroke="#7dd3fc" stroke-width="1.1" stroke-linecap="round" />
+</svg>

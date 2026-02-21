@@ -1,0 +1,9 @@
+# Central image configuration.
+# Hero image starts with `primary`, auto-flips every `flip_interval_seconds`,
+# and toggles between `primary` and `alternate` on each click.
+
+hero:
+  primary: "assets/website/image_profile.png"
+  alternate: "assets/website/image_profile_ai.png"
+  flip_interval_seconds: 15
+  alt: "Marian profile photo"
