@@ -2,12 +2,12 @@
 # Most fields are optional. If a field is missing, inline HTML fallback is used.
 
 head:
-  title: "Marian Bodnar — Developer & Engineer"
+  title: "Marian Bodnar — DevOps Engineer"
   description: "Personal portfolio of Marian Bodnar — Developer, Engineer, and lifelong learner."
   og_title: "Marian Bodnar — Portfolio"
   og_description: "Personal portfolio showcasing projects, certifications, and experience."
   og_type: "website"
-  canonical_url: "https://yourusername.github.io/"
+  canonical_url: "https://github.com/bodnarmarian14"
   icons:
     svg: "assets/website/favicon.svg"
     png_64: "assets/website/favicon-profile-64.png"
@@ -15,30 +15,30 @@ head:
     fallback_svg: "assets/website/favicon.svg"
 
 site:
-  nav_logo: "<YourName />"
+  nav_logo: "Marian Bodnar"
 
 contact:
-  email: "you@email.com"
+  email: "bodnarmarian14@gmail.com"
 
 hero:
   availability: "Open to opportunities"
   greeting: "Hi, I'm"
   name: "Marian Bodnar"
   subtitle: "Cloud Engineer · DevOps · Full-Stack Developer"
-  description: "Passionate about building scalable infrastructure, automating everything, and shipping software that makes a difference. Based in 📍 Your City, Your Country."
+  description: "Passionate about building scalable infrastructure, automating everything, and shipping software that makes a difference. Based in 📍 Breaza, Suceava, Romania."
   avatar_image: "" # optional static fallback; rotating hero images are configured in images.yaml
   avatar_alt: "Marian Bodnar profile photo"
   cta:
     - label: "View Projects ↓"
       href: "#projects"
     - label: "Contact Me"
-      href: "mailto:you@email.com"
+      href: "mailto:bodnarmarian14@gmail.com"
   stats:
     - value: "5+"
       label: "Years Exp."
-    - value: "20+"
+    - value: "2+"
       label: "Projects"
-    - value: "15+"
+    - value: "10"
       label: "Certs"
 
 about:
@@ -49,25 +49,25 @@ about:
   highlights:
     - icon: "📍"
       label: "Location"
-      value: "Your City, Country"
+      value: "Breaza, Suceava, Romania"
     - icon: "💼"
       label: "Current Role"
-      value: "Senior Cloud Engineer"
+      value: "DevOps/Platform Engineer"
     - icon: "🎯"
       label: "Focus"
-      value: "Cloud · DevOps · Security"
+      value: "Cloud · DevOps · Platform"
     - icon: "📧"
       label: "Email"
-      value: "you@email.com"
+      value: "bodnarmarian14@gmail.com"
       type: "email"
     - icon: "🌐"
       label: "Languages"
-      value: "English · Spanish"
+      value: "English · Romanian"
 
 experience:
   items:
-    - role: "Senior Cloud Engineer"
-      period: "2022 – Present"
+    - role: "DevOps/Platform Engineer"
+      period: "2025 – Present"
       company: "Qodea"
       logo: "assets/companies/qodea.jpeg"
       employment_type: "Full-time"
@@ -85,39 +85,119 @@ experience:
       employment_type: "Full-time"
       description: "Developed RESTful APIs and React front-ends for enterprise clients. Introduced automated testing, improving code quality and reducing bugs by 45%."
 
+# check these for icons: https://simpleicons.org https://icon-sets.iconify.design
 skills:
   categories:
     - title: "☁️ Cloud Platforms"
-      tags: ["AWS", "Azure", "GCP", "Cloudflare"]
-    - title: "⚙️ DevOps & CI/CD"
-      tags: ["Terraform", "Ansible", "GitHub Actions", "Jenkins", "ArgoCD"]
-    - title: "🐳 Containers"
-      tags: ["Docker", "Kubernetes", "Helm", "Podman"]
-    - title: "💻 Languages"
-      tags: ["Python", "Bash", "JavaScript", "TypeScript", "Go"]
+      tags:
+        - label: "AWS"
+          url: "https://api.iconify.design/skill-icons:aws-dark.svg"
+        - label: "Azure"
+          url: "https://api.iconify.design/material-icon-theme:azure.svg"
+        - label: "GCP"
+          url: "https://api.iconify.design/material-icon-theme:gcp.svg"
+    - title: "♾️ DevOps & CI/CD"
+      tags:
+        - label: "Terraform"
+          url: "https://cdn.simpleicons.org/terraform"
+        - label: "Ansible"
+          url: "https://cdn.simpleicons.org/ansible"
+        - label: "GitHub Actions"
+          url: "https://cdn.simpleicons.org/githubactions"
+        - label: "Jenkins"
+          url: "https://cdn.simpleicons.org/jenkins"
+        - label: "ArgoCD"
+          url: "https://cdn.simpleicons.org/argo"
+    - title: "☸️ Containers"
+      tags:
+        - label: "Docker"
+          url: "https://cdn.simpleicons.org/docker"
+        - label: "Kubernetes"
+          url: "https://cdn.simpleicons.org/kubernetes"
+        - label: "Helm"
+          url: "https://cdn.simpleicons.org/helm"
+          color: "#39FF14"
+        - label: "Podman"
+          url: "https://cdn.simpleicons.org/podman"
+    - title: "🧑‍💻 Languages"
+      tags:
+        - label: "Python"
+          url: "https://cdn.simpleicons.org/python"
+        - label: "Bash"
+          url: "https://cdn.simpleicons.org/gnubash"
+        - label: "Go"
+          url: "https://cdn.simpleicons.org/go"
     - title: "🗃️ Databases"
-      tags: ["PostgreSQL", "MySQL", "MongoDB", "Redis"]
-    - title: "🔒 Security"
-      tags: ["IAM", "Vault", "SIEM", "Zero Trust", "SOC 2"]
+      tags:
+        - label: "PostgreSQL"
+          url: "https://cdn.simpleicons.org/postgresql"
+        - label: "MySQL"
+          url: "https://cdn.simpleicons.org/mysql"
+        - label: "MongoDB"
+          url: "https://cdn.simpleicons.org/mongodb"
+        - label: "Redis"
+          url: "https://cdn.simpleicons.org/redis"
+    - title: "🛡️ Security"
+      tags:
+        - label: "IAM"
+          url: "https://api.iconify.design/flat-color-icons:rules.svg"
+        - label: "Vault"
+          url: "https://cdn.simpleicons.org/vault"
+        - label: "Zero Trust"
+          url: "https://api.iconify.design/token-branded:zero.svg"
 
 certifications:
   items:
-    - name: "AWS Solutions Architect – Associate"
-      issuer: "Amazon Web Services"
-      date: "✓ Issued Jan 2024"
-      verify_url: "https://www.credly.com/badges/YOUR-BADGE-ID"
-      badge_emoji: "🏅"
+    - name: "Professional Cloud DevOps Engineer"
+      issuer: "Google Cloud"
+      date: "✓ Issued Dec 2025"
+      verify_url: "https://www.credly.com/badges/4cdf8cc6-bf87-4f1f-ba14-e83094d5ab7b/public_url"
+      badge_image: "https://images.credly.com/size/110x110/images/33f08b7e-fa6a-41cd-810a-21cc1c336f6d/image.png"
     - name: "Certified Kubernetes Administrator (CKA)"
       issuer: "The Linux Foundation"
-      date: "✓ Issued Mar 2023"
-      verify_url: "https://www.credly.com/badges/YOUR-BADGE-ID"
-      badge_emoji: "🏅"
+      date: "✓ Issued Mar 2024"
+      verify_url: "https://www.credly.com/badges/e3536e2b-a534-427c-b7b7-38ee1078c832/public_url"
+      badge_image: "https://images.credly.com/size/110x110/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png"
+    - name: "Associate Cloud Engineer"
+      issuer: "Google Cloud"
+      badge_image: "https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png"
+      verify_url: "https://www.credly.com/badges/1fe8d4c9-4b6e-42b9-8f83-03efdcad754f/public_url"
+      date: "✓ Issued Nov 2025"
     - name: "Datadog Fundamentals"
       issuer: "Datadog"
       date: "✓ Issued Jan 2026"
       verify_url: "https://www.credly.com/badges/328c4555-7ad0-4cf0-94c5-221770cd4a3e/public_url"
-      badge_image: "https://images.credly.com/size/340x340/images/77d92dec-5c60-447b-8326-c592812f2483/blob"
-      #badge_image: "https://images.credly.com/size/340x340/images/YOUR-CREDLY-IMAGE-ID/aws-certified-developer-associate.png"
+      badge_image: "https://images.credly.com/size/110x110/images/77d92dec-5c60-447b-8326-c592812f2483/blob"
+    - name: "AWS Certified Cloud Practitioner"
+      issuer: "Amazon Web Services"
+      badge_image: "https://images.credly.com/size/110x110/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png" 
+      verify_url: "https://www.credly.com/badges/88be74a4-3418-4577-b53f-8f978423208c/public_url"
+      date: "✓ Issued Mar 2024"
+    - name: "Cloud Digital Leader"
+      issuer: "Google Cloud"
+      badge_image: "https://images.credly.com/size/110x110/images/44994cda-b5b0-44cb-9a6d-d29b57163073/image.png"
+      verify_url: "https://www.credly.com/badges/e392c409-58cd-4a11-b7f3-c8a93e175a01/public_url"
+      date: "✓ Issued Nov 2025"
+    - name: "Azure Fundamentals"
+      issuer: "Microsoft"
+      badge_image: "https://images.credly.com/size/110x110/images/be8fcaeb-c769-4858-b567-ffaaa73ce8cf/image.png"
+      verify_url: "https://www.credly.com/badges/3cbbbda5-ba6c-4635-a861-3bb6b13b332f/public_url"
+      date: "✓ Issued Oct 2022"
+    - name: "GitOps Fundamentals"
+      issuer: "Codefresh"
+      badge_image: "https://images.credly.com/size/110x110/images/fbd71e9c-07f7-4a8b-a874-2bf5001a6dbf/blob"
+      verify_url: "https://www.credly.com/badges/9301eeea-c745-4c9b-8b06-015aeb609560/public_url"
+      date: "✓ Issued Nov 2022"
+    - name: "HashiCorp Certified: Terraform Associate (002)"
+      issuer: "HashiCorp"
+      badge_image: "https://images.credly.com/size/110x110/images/cd038261-9d1c-4792-bc62-3a3b5bda175c/blob" 
+      verify_url: "https://www.credly.com/badges/1b6dd5fb-0cbe-4f08-8f75-da28b88d455e/public_url"
+      date: "✓ Issued Oct 2022" 
+    - name: "Generative AI Leader"
+      issuer: "GoogleCloud"
+      badge_image: "https://images.credly.com/size/110x110/images/ec23e41a-0f32-4a98-9c00-28925621b281/blob"
+      verify_url: "https://www.credly.com/badges/3ea45eaa-d3b3-4825-9a9e-5ecb1afc0d65/public_url"
+      date: "✓ Issued Nov 2025"
 
 projects:
   items:
@@ -164,12 +244,12 @@ videos:
 
 social:
   github: "https://github.com/bodnarmarian14"
-  linkedin: "https://linkedin.com/in/yourusername"
+  linkedin: "linkedin.com/in/marian-bodnar-411948261"
   twitter: "https://twitter.com/yourusername"
-  credly: "https://credly.com/users/yourusername"
+  credly: "https://www.credly.com/users/marian-bodnar"
   youtube: "https://youtube.com/@yourusername"
 
 footer:
-  hosted_link_url: "https://pages.github.com/"
+  hosted_link_url: "https://github.com/bodnarmarian14"
   rights_owner: "Marian Bodnar"
   rights_text: "All rights reserved"
