@@ -545,14 +545,139 @@ function renderSkills(skills) {
     const tagsWrap = document.createElement('div');
     tagsWrap.className = 'skill-tags';
     (Array.isArray(category.tags) ? category.tags : []).forEach(tag => {
-      if (!isNonEmptyString(tag)) {
+      const tagData = normalizeSkillTag(tag);
+      if (!tagData) {
         return;
       }
-      tagsWrap.append(createTextNode('span', 'skill-tag', tag));
+
+      const tagChip = document.createElement('span');
+      tagChip.className = 'skill-tag';
+      if (isNonEmptyString(tagData.iconUrl)) {
+        const iconNode = document.createElement('img');
+        iconNode.className = 'skill-tag-tech-icon';
+        iconNode.src = tagData.iconUrl;
+        iconNode.alt = `${tagData.label} icon`;
+        iconNode.loading = 'lazy';
+        iconNode.decoding = 'async';
+        iconNode.onerror = () => {
+          iconNode.remove();
+        };
+        tagChip.append(iconNode);
+      } else if (isNonEmptyString(tagData.icon)) {
+        const iconNode = createTextNode('span', 'skill-tag-icon', tagData.icon);
+        iconNode.setAttribute('aria-hidden', 'true');
+        tagChip.append(iconNode);
+      }
+      tagChip.append(createTextNode('span', 'skill-tag-label', tagData.label));
+      tagsWrap.append(tagChip);
     });
     categoryEl.append(tagsWrap);
     grid.append(categoryEl);
   });
+}
+
+function normalizeSkillTag(tag) {
+  if (isNonEmptyString(tag)) {
+    const label = tag.trim();
+    return {
+      label,
+      iconUrl: ''
+    };
+  }
+
+  if (!tag || typeof tag !== 'object') {
+    return null;
+  }
+
+  // Supports shorthand YAML object format:
+  // - AWS: https://cdn.simpleicons.org/amazonwebservices
+  const shorthandEntry = getSkillTagShorthandEntry(tag);
+  const label = shorthandEntry
+    ? shorthandEntry.label
+    : (isNonEmptyString(tag.label)
+      ? tag.label
+      : (isNonEmptyString(tag.name) ? tag.name : ''));
+  if (!isNonEmptyString(label)) {
+    return null;
+  }
+
+  const yamlUrl = shorthandEntry
+    ? shorthandEntry.iconUrl
+    : (isNonEmptyString(tag.url) ? tag.url : '');
+  const iconColor = isNonEmptyString(tag.color) ? tag.color.trim() : '';
+  const iconUrl = isNonEmptyString(tag.icon_url)
+    ? tag.icon_url
+    : (isNonEmptyString(yamlUrl)
+      ? yamlUrl
+    : (isNonEmptyString(tag.icon) && isProbablyUrl(tag.icon)
+      ? tag.icon
+      : ''));
+
+  return {
+    label,
+    iconUrl: applyIconColor(iconUrl, iconColor),
+    iconColor,
+    icon: isNonEmptyString(tag.icon) && !isProbablyUrl(tag.icon) ? tag.icon : ''
+  };
+}
+
+function getSkillTagShorthandEntry(tag) {
+  const entries = Object.entries(tag || {});
+  if (entries.length !== 1) {
+    return null;
+  }
+
+  const [rawLabel, rawIconUrl] = entries[0];
+  if (!isNonEmptyString(rawLabel) || !isNonEmptyString(rawIconUrl) || !isProbablyUrl(rawIconUrl)) {
+    return null;
+  }
+
+  return {
+    label: rawLabel.trim(),
+    iconUrl: rawIconUrl.trim()
+  };
+}
+
+function isProbablyUrl(value) {
+  return typeof value === 'string'
+    && /^(https?:\/\/|\/|\.{1,2}\/)/.test(value.trim());
+}
+
+function normalizeHexColor(color) {
+  if (!isNonEmptyString(color)) {
+    return '';
+  }
+  const normalized = color.trim().replace(/^#/, '');
+  return /^[0-9a-fA-F]{3,8}$/.test(normalized) ? normalized : '';
+}
+
+function applyIconColor(iconUrl, color) {
+  if (!isNonEmptyString(iconUrl)) {
+    return '';
+  }
+
+  const hexColor = normalizeHexColor(color);
+  if (!hexColor) {
+    return iconUrl;
+  }
+
+  try {
+    const parsed = new URL(iconUrl, window.location.href);
+    if (parsed.hostname !== 'cdn.simpleicons.org') {
+      return iconUrl;
+    }
+
+    const segments = parsed.pathname.split('/').filter(Boolean);
+    if (segments.length === 0) {
+      return iconUrl;
+    }
+
+    const slug = segments[0];
+    parsed.pathname = `/${slug}/${hexColor}`;
+    return parsed.toString();
+  } catch (error) {
+    return iconUrl;
+  }
 }
 
 function renderCertifications(certs) {
