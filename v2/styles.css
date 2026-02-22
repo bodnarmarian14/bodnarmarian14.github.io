@@ -633,8 +633,8 @@ nav {
 }
 
 .timeline-company-logo {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   border-radius: 4px;
   object-fit: cover;
   border: 1px solid var(--border);
@@ -698,12 +698,35 @@ nav {
   font-size: 0.8rem;
   font-weight: 500;
   transition: all var(--transition);
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .skill-tag:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-glow);
+}
+
+.skill-tag-icon {
+  font-size: 0.85rem;
+}
+
+.skill-tag-tech-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.skill-tag-label {
+  display: inline-block;
 }
 
 /* ========== CERTS ========== */
