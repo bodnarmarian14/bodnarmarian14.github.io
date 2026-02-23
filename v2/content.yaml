@@ -231,16 +231,12 @@ videos:
   items:
     - youtube_id: "VIDEO_ID_1"
       title: "Terraform Best Practices 2024"
-      views: "12K views"
-      date: "Jan 2024"
+      description: "Hands-on guide to writing safer Terraform modules, structuring environments, and avoiding drift in multi-account setups. Covers state strategy, policy checks, and CI workflows with practical examples."
+      repo_url: "https://github.com/yourusername/terraform-best-practices"
     - youtube_id: "VIDEO_ID_2"
       title: "Kubernetes Zero to Hero — Full Tutorial"
-      views: "28K views"
-      date: "Mar 2023"
-    - youtube_id: "VIDEO_ID_3"
-      title: "Building a Zero Trust Architecture"
-      views: "8.5K views"
-      date: "Sep 2023"
+      description: "End-to-end Kubernetes tutorial from local cluster setup to production patterns. Includes deployments, services, ingress, observability, and rollout strategies with real troubleshooting scenarios."
+      repo_url: "https://github.com/yourusername/kubernetes-zero-to-hero"
 
 social:
   github: "https://github.com/bodnarmarian14"
