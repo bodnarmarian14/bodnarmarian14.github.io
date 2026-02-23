@@ -540,7 +540,27 @@ function renderSkills(skills) {
     }
     const categoryEl = document.createElement('div');
     categoryEl.className = 'skill-category fade-in';
-    categoryEl.append(createTextNode('div', 'skill-cat-title', category.title));
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'skill-cat-title';
+    if (isNonEmptyString(category.title_icon_url)) {
+      const titleIcon = document.createElement('img');
+      titleIcon.className = 'skill-cat-title-icon';
+      titleIcon.src = category.title_icon_url;
+      titleIcon.alt = `${category.title} icon`;
+      titleIcon.loading = 'lazy';
+      titleIcon.decoding = 'async';
+      titleIcon.onerror = () => {
+        titleIcon.remove();
+      };
+      titleEl.append(titleIcon);
+    } else if (isNonEmptyString(category.title_icon)) {
+      const titleIcon = createTextNode('span', 'skill-cat-title-icon-emoji', category.title_icon);
+      titleIcon.setAttribute('aria-hidden', 'true');
+      titleEl.append(titleIcon);
+    }
+    titleEl.append(createTextNode('span', 'skill-cat-title-label', category.title));
+    categoryEl.append(titleEl);
 
     const tagsWrap = document.createElement('div');
     tagsWrap.className = 'skill-tags';
@@ -690,6 +710,19 @@ function renderCertifications(certs) {
     return;
   }
 
+  const certContainer = document.querySelector('#certs .container');
+  const existingMoreWrap = certContainer
+    ? certContainer.querySelector('.certs-more-wrap')
+    : null;
+  if (existingMoreWrap) {
+    existingMoreWrap.remove();
+  }
+
+  const visibleCertCount = Number.isFinite(Number(certs.initial_visible_count))
+    && Number(certs.initial_visible_count) > 0
+    ? Number(certs.initial_visible_count)
+    : 8;
+  let renderedCount = 0;
   grid.replaceChildren();
   certs.items.forEach(item => {
     if (!item || !isNonEmptyString(item.name)) {
@@ -698,6 +731,10 @@ function renderCertifications(certs) {
 
     const card = document.createElement('div');
     card.className = 'cert-card fade-in';
+    if (renderedCount >= visibleCertCount) {
+      card.classList.add('cert-card-hidden');
+    }
+
     const badgeWrap = document.createElement('div');
     badgeWrap.className = 'cert-badge-wrapper';
 
@@ -732,7 +769,43 @@ function renderCertifications(certs) {
       verifyLink
     );
     grid.append(card);
+    renderedCount += 1;
   });
+
+  if (!certContainer || renderedCount <= visibleCertCount) {
+    return;
+  }
+
+  const moreWrap = document.createElement('div');
+  moreWrap.className = 'certs-more-wrap';
+  const toggleButton = document.createElement('button');
+  toggleButton.type = 'button';
+  toggleButton.className = 'btn btn-outline certs-more-btn';
+  const moreLabel = isNonEmptyString(certs.more_button_label)
+    ? certs.more_button_label
+    : 'View More Certifications';
+  const lessLabel = isNonEmptyString(certs.less_button_label)
+    ? certs.less_button_label
+    : 'View Less';
+  let expanded = false;
+
+  const applyExpandedState = () => {
+    grid.querySelectorAll('.cert-card').forEach((card, index) => {
+      const shouldHide = !expanded && index >= visibleCertCount;
+      card.classList.toggle('cert-card-hidden', shouldHide);
+    });
+    toggleButton.textContent = expanded ? lessLabel : moreLabel;
+    refreshDynamicUi();
+  };
+
+  toggleButton.addEventListener('click', () => {
+    expanded = !expanded;
+    applyExpandedState();
+  });
+
+  applyExpandedState();
+  moreWrap.append(toggleButton);
+  certContainer.append(moreWrap);
 }
 
 function renderProjects(projects) {
@@ -844,6 +917,97 @@ function toEmbedUrl(video) {
   return '';
 }
 
+const VIDEO_DESCRIPTION_PREVIEW_THRESHOLD = 180;
+let videoModal = null;
+
+function ensureVideoModal() {
+  if (videoModal) {
+    return videoModal;
+  }
+
+  const modalRoot = document.createElement('div');
+  modalRoot.className = 'video-modal';
+  modalRoot.setAttribute('aria-hidden', 'true');
+  modalRoot.innerHTML = `
+    <div class="video-modal-backdrop" data-video-close="true"></div>
+    <div class="video-modal-card" role="dialog" aria-modal="true" aria-labelledby="video-modal-title">
+      <button type="button" class="video-modal-close" aria-label="Close">✕</button>
+      <h3 id="video-modal-title" class="video-modal-title"></h3>
+      <div class="video-modal-embed-wrap">
+        <iframe class="video-modal-embed" title="Video preview"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p class="video-modal-description"></p>
+      <div class="video-modal-actions">
+        <a class="btn btn-primary video-modal-repo" target="_blank" rel="noopener">Open Git Repo ↗</a>
+      </div>
+    </div>
+  `;
+  document.body.append(modalRoot);
+
+  const titleEl = modalRoot.querySelector('.video-modal-title');
+  const embedWrapEl = modalRoot.querySelector('.video-modal-embed-wrap');
+  const embedEl = modalRoot.querySelector('.video-modal-embed');
+  const descriptionEl = modalRoot.querySelector('.video-modal-description');
+  const repoLinkEl = modalRoot.querySelector('.video-modal-repo');
+  const closeButton = modalRoot.querySelector('.video-modal-close');
+  const backdrop = modalRoot.querySelector('.video-modal-backdrop');
+
+  const close = () => {
+    modalRoot.classList.remove('open');
+    modalRoot.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('video-modal-open');
+    if (embedEl) {
+      embedEl.src = '';
+    }
+  };
+
+  const open = (video, embedUrl) => {
+    titleEl.textContent = isNonEmptyString(video.title) ? video.title : 'Video';
+    if (isNonEmptyString(embedUrl)) {
+      embedEl.src = embedUrl;
+      embedWrapEl.classList.remove('hidden');
+    } else {
+      embedEl.src = '';
+      embedWrapEl.classList.add('hidden');
+    }
+    descriptionEl.textContent = isNonEmptyString(video.description)
+      ? video.description
+      : 'No additional description available.';
+
+    if (isNonEmptyString(video.repo_url)) {
+      repoLinkEl.href = video.repo_url;
+      repoLinkEl.classList.remove('disabled');
+      repoLinkEl.setAttribute('aria-disabled', 'false');
+    } else {
+      repoLinkEl.href = '#';
+      repoLinkEl.classList.add('disabled');
+      repoLinkEl.setAttribute('aria-disabled', 'true');
+    }
+
+    modalRoot.classList.add('open');
+    modalRoot.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('video-modal-open');
+  };
+
+  closeButton.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  modalRoot.addEventListener('click', event => {
+    if (event.target.matches('.video-modal-repo.disabled')) {
+      event.preventDefault();
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modalRoot.classList.contains('open')) {
+      close();
+    }
+  });
+
+  videoModal = { open, close };
+  return videoModal;
+}
+
 function renderVideos(videos) {
   if (!videos || !Array.isArray(videos.items) || videos.items.length === 0) {
     return;
@@ -879,15 +1043,25 @@ function renderVideos(videos) {
     info.className = 'video-info';
     info.append(createTextNode('div', 'video-title', item.title));
 
-    const meta = document.createElement('div');
-    meta.className = 'video-meta';
-    if (isNonEmptyString(item.views)) {
-      meta.append(createTextNode('span', '', `▶ ${item.views}`));
+    const descriptionText = isNonEmptyString(item.description)
+      ? item.description
+      : '';
+    const descriptionEl = createTextNode('p', 'video-description', descriptionText);
+    info.append(descriptionEl);
+
+    if (descriptionText.length > VIDEO_DESCRIPTION_PREVIEW_THRESHOLD) {
+      const actions = document.createElement('div');
+      actions.className = 'video-actions';
+      const readMoreButton = document.createElement('button');
+      readMoreButton.type = 'button';
+      readMoreButton.className = 'video-read-more';
+      readMoreButton.textContent = 'Read More';
+      readMoreButton.addEventListener('click', () => {
+        ensureVideoModal().open(item, embedUrl);
+      });
+      actions.append(readMoreButton);
+      info.append(actions);
     }
-    if (isNonEmptyString(item.date)) {
-      meta.append(createTextNode('span', '', `📅 ${item.date}`));
-    }
-    info.append(meta);
 
     card.append(thumb, info);
     grid.append(card);
