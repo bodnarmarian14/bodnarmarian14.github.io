@@ -218,14 +218,14 @@ education:
   items:
     - icon: "🎓"
       degree: "B.Sc. Computer Science"
-      school: "University Name"
-      period: "2014 – 2018 · Your City"
-      description: "Focused on distributed systems, algorithms, and software engineering. Graduated with honors."
+      school: "Stefan cel Mare University of Suceava"
+      period: "2017 – 2021 · Suceava"
+      description: "Specialized in compute science."
     - icon: "📚"
-      degree: "M.Sc. Cloud Computing"
+      degree: "Stefan cel Mare University of Suceava"
       school: "Another University"
-      period: "2019 – 2021 · Online"
-      description: "Specialized in cloud architecture, security, and distributed computing systems."
+      period: "2021 – 2023 · Suceava"
+      description: "Specialized in various aspects of compute science."
 
 videos:
   items:
