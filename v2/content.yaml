@@ -67,23 +67,60 @@ about:
 experience:
   items:
     - role: "DevOps/Platform Engineer"
-      period: "2025 – Present"
+      period: "Jul 2025 – Present"
       company: "Qodea"
       logo: "assets/companies/qodea.jpeg"
       employment_type: "Full-time"
-      description: "Led cloud infrastructure modernization across 3 AWS regions. Reduced deployment time by 70% via CI/CD pipelines. Managed Kubernetes clusters serving 1M+ daily users."
-    - role: "DevOps Engineer"
-      period: "2020 – 2022"
+      description: |
+        Using Google Cloud, Terraform, Terragrunt
+    - role: "Junior DevOps Engineer"
+      period: "Nov 2023 – Jul 2025"
       company: "Nagarro"
       logo: "assets/companies/nagarro.png"
       employment_type: "Full-time"
-      description: "Built and maintained CI/CD pipelines with Jenkins and GitHub Actions. Implemented Infrastructure as Code using Terraform. Achieved 99.99% uptime SLA."
-    - role: "Full-Stack Developer"
-      period: "2018 – 2020"
+      description: |
+        Developing and maintaining CI pipeline using GitLabCI. Deploying and managing applications on Kubernetes using various manifests
+        (Deployments, Services, Ingress, ConfigMaps). Creating and publishing Dockerfiles and Helm charts to Harbor/JFrog or creating 
+        small Python projects to use Harbor API. Automating the creation of a POC K8s cluster on 3 VMs using Ansible.
+    - role: "Intern DevOps Engineer"
+      period: "Jul 2023 - Aug 2023"
+      company: "Nagarro"
+      logo: "assets/companies/nagarro.png"
+      employment_type: "Full-time"
+      description: |
+        Before the internship, I participated in a remote learning program with weekly meetings focusing on the basics of Linux, Docker, 
+        and Jenkins. During the internship, I applied and enhanced that knowledge through practice. I was working for Dockerfile, 
+        Jenkins pipeline that built and pushed the image in ECS and after deploying the on ECS or EKS. Also, I developed a cron pipeline 
+        that creates/destroys the infrastructure written using Terraform IaC.
+    - role: "Intern DevOps Engineer"
+      period: "Jul 2022 – Sep 2022"
       company: "Endava"
       logo: "assets/companies/endava.png"
       employment_type: "Full-time"
-      description: "Developed RESTful APIs and React front-ends for enterprise clients. Introduced automated testing, improving code quality and reducing bugs by 45%."
+      description: |
+        As part of an eight-person team, contributed to the development of infrastructure using Terraform. After we had the infrastructure 
+        set up each one had different tasks. My responsibilities included designing and implementing Dockerfile. for backend applications 
+        and creating Kubernetes manifests for resources such as Deployments, Services, and Ingress. Another task was to create a backup 
+        for database every day and I used the K8s CronJob for this.
+    - role: "C/C++ Developer"
+      period: "Oct 2019 – Jul 2022"
+      company: "Antaco Romania (QST)"
+      logo: "assets/companies/qst.jpeg"
+      employment_type: "Full-time"
+      description: |
+        Developed and maintained C/C++ code, including refactoring legacy C code into modern C++. Implemented comprehensive unit tests using 
+        the Google Test framework. Contributing to front-end web development using HTML, CSS, and JavaScript/jQuerry. Besides, I 
+        changed/adapted the CI pipeline for the newly developed code.
+    - role: "C/C++ Analyst"
+      period: "Jul 2019 - Oct 2019"
+      company: "Antaco Romania (QST)"
+      logo: "assets/companies/qst.jpeg"
+      employment_type: "Full-time"
+      description: |
+        Gained practical experience in software development using C/C++ (mostly based on standard 11). I was using external libraries such 
+        as Boost. Also, I learned how to structure and use package managers such as CMake or Conan for building and managing dependencies. 
+        Besides those, I was learning the basics of Linux and how to connect to MariaDB using C++ connectors. At the end of the practice, 
+        I developed a project that used all the learned technologies.
 
 # check these for icons: https://simpleicons.org https://icon-sets.iconify.design
 skills:
