@@ -34,7 +34,8 @@ experience:
     logo: "images/companies/qodea.jpeg"
     date: "Jul 2025 - Present"
     desc: |
-      Using Google Cloud, Terraform, Terragrunt
+      Working in a ticket-based environment, responsible for developing and maintaining cloud infrastructure on Google Cloud Platform using Terraform and Terragrunt.
+      Handling day-to-day operational tasks including implementing incremental fixes and improvements to CI/CD pipelines (GitLab CI and GCP Cloud Build),remediating Docker image vulnerabilities.
   - role: "Junior DevOps Engineer"
     company: "Nagarro"
     logo: "images/companies/nagarro.png"
