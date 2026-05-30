@@ -31,7 +31,7 @@ about: |
 experience:
   - role: "Platform Engineer"
     company: "Qodea"
-    logo: "images/companies/qodea.jpeg"
+    logo: "images/companies/beyonde.png"
     date: "Jul 2025 - Present"
     desc: |
       Working in a ticket-based environment, responsible for developing and maintaining cloud infrastructure on Google Cloud Platform using Terraform and Terragrunt.
