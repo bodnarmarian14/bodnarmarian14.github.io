@@ -41,11 +41,17 @@
         <li><a href="#videos">Videos</a></li>
       </ul>
       <div class="nav-actions">
+        <button id="download-cv" title="Download CV as PDF" aria-label="Download CV as PDF">⬇️ <span class="download-cv-label">CV</span></button>
         <button id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">☀️</button>
         <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
       </div>
     </div>
   </nav>
+  <!-- ========== PDF LOADING OVERLAY ========== -->
+  <div id="pdf-loading-overlay" class="pdf-loading-overlay" aria-hidden="true">
+    <div class="pdf-spinner"></div>
+    <p>Generating PDF…</p>
+  </div>
   <!-- ========== HERO ========== -->
   <section id="home">
     <div class="hero-bg"></div>
@@ -196,6 +202,9 @@
   <button id="back-top" title="Back to top" aria-label="Back to top">↑</button>
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="generate_pdf.js"></script>
   <script src="script.js"></script>
 </body>
 

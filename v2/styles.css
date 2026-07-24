@@ -193,6 +193,68 @@ nav {
   border-color: var(--accent);
 }
 
+#download-cv {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+#download-cv:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+/* ========== PDF LOADING OVERLAY ========== */
+.pdf-loading-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 17, 23, 0.85);
+  z-index: 9999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pdf-loading-overlay.visible {
+  display: flex;
+}
+
+.pdf-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  animation: pdf-spin 1s linear infinite;
+}
+
+@keyframes pdf-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .hamburger {
   display: none;
   background: none;
@@ -229,6 +291,18 @@ nav {
   .nav-links a {
     padding: 10px 12px;
     width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  #download-cv {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  #download-cv .download-cv-label {
+    display: none;
   }
 }
 

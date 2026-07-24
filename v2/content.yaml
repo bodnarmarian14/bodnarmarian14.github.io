@@ -24,7 +24,7 @@ hero:
   availability: "Open to opportunities"
   greeting: "Hi, I'm"
   name: "Marian Bodnar"
-  subtitle: "Cloud Engineer · DevOps · Full-Stack Developer"
+  subtitle: "Cloud Engineer · DevOps"
   description: "Passionate about building scalable infrastructure, automating everything, and shipping software that makes a difference. Based in 📍 Breaza, Suceava, Romania."
   avatar_image: "" # optional static fallback; rotating hero images are configured in images.yaml
   avatar_alt: "Marian Bodnar profile photo"
@@ -72,7 +72,9 @@ experience:
       logo: "assets/companies/beyonde.png"
       employment_type: "Full-time"
       description: |
-        Using Google Cloud, Terraform, Terragrunt
+        Developing and maintaining cloud infrastructure on Google Cloud Platform using Terraform and Terragrunt, with CI/CD pipelines
+        built on GitHub Actions. Deploying and managing GCP resources including VPC Service Controls (VPC-SC), Cloud Storage (GCS)
+        buckets, IAM roles/bindings, Compute Engine VMs, Cloud Build pipelines, and other core GCP infrastructure.
     - role: "Junior DevOps Engineer"
       period: "Nov 2023 – Jul 2025"
       company: "Nagarro"
