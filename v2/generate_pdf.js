@@ -106,10 +106,12 @@ async function downloadCvPdf() {
 
     const avatarUrl = hero.avatar_image || (imagesConfig && imagesConfig.hero && imagesConfig.hero.primary) || '';
 
-    // Concurrent image loading
+    // Concurrent image loading. Certification badges prefer a local pdf_badge
+    // copy over the remote badge_image URL, since credly.com doesn't send
+    // CORS headers and a canvas-tainted remote image can't be read as base64.
     const [profileImg, ...certImages] = await Promise.all([
       pdfGetBase64Image(avatarUrl, true),
-      ...certItems.map(c => pdfGetBase64Image(c.badge_image, false))
+      ...certItems.map(c => pdfGetBase64Image(c.pdf_badge || c.badge_image, false))
     ]);
 
     // --- Sidebar content ---
